@@ -14,8 +14,6 @@ function ExchangeRates() {
     null,
   );
 
-  //    getTicker(ETickerSource.BINANCE, 'BTC');
-
   useEffect(() => {
     setLoading(true);
 
@@ -25,16 +23,16 @@ function ExchangeRates() {
 
         const [
           binanceTickerResponse,
-          // bittrexTickerResponse,
+          bittrexTickerResponse,
           zondaTickerResponse,
         ] = await Promise.all([
           getTicker(ETickerSource.BINANCE, crypto),
-          // getTicker(ETickerSource.BITTREX, crypto),
+          getTicker(ETickerSource.BITTREX, crypto),
           getTicker(ETickerSource.ZONDACRYPTO, crypto),
         ]);
 
         setBinanceER(binanceTickerResponse);
-        //   setBittrexER(bittrexTickerResponse);
+        setBittrexER(bittrexTickerResponse);
         setZondaCryptoER(zondaTickerResponse);
       } finally {
         setLoading(false);
