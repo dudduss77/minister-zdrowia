@@ -25,10 +25,15 @@ const generateReport = async (cryptoObject: TCryptoObject) => {
 
   cryptoObject.cryptos.forEach(async (crypto) => {
     const [binance, bittrex, zondacrypto] = await Promise.all([
-      getTicker(ETickerSource.BINANCE, crypto.shortName),
-      getTicker(ETickerSource.BITTREX, crypto.shortName),
-      getTicker(ETickerSource.ZONDACRYPTO, crypto.shortName),
+      getTicker(ETickerSource.BINANCE, crypto.shortname),
+      getTicker(ETickerSource.BITTREX, crypto.shortname),
+      getTicker(ETickerSource.ZONDACRYPTO, crypto.shortname),
     ]);
+
+    if (!crypto.exchangeRate) {
+      crypto.exchangeRate = [];
+    }
+
     if (binance) {
       crypto.exchangeRate.push(binance);
     }
