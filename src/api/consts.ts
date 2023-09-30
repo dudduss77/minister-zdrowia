@@ -1,7 +1,7 @@
 import TCryproDictionaryItem from '../types/TCryptoDictionaryItem';
 
 export const getTodayExchangeRateUrl =
-  'http://api.nbp.pl/api/exchangerates/rates/c/usd/last/1?format=json';
+  'http://api.nbp.pl/api/exchangerates/rates/a/usd?format=json';
 
 export const cryptoDictionary: TCryproDictionaryItem[] = [
   {

@@ -38,11 +38,13 @@ const generateReport = async (cryptoObject: TCryptoObject) => {
     if (zondacrypto) {
       crypto.exchangeRate.push(zondacrypto);
     }
+
+    await convertUsdToPln(cryptoObject);
+
+    calculateFinalValue(cryptoObject);
+
+    console.log(cryptoObject);
   });
-
-  convertUsdToPln(cryptoObject);
-
-  calculateFinalValue(cryptoObject);
 };
 
 export default generateReport;
