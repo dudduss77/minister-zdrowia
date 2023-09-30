@@ -1,4 +1,4 @@
-export type TTickerReponse =
+export type TZondaCryptoTickerReponse =
   | {
       status: 'Ok';
       ticker: {
