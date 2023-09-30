@@ -52,20 +52,24 @@ const processBittrexTicker = (ticker: TBittrexTickerReponse) => {
 };
 
 const getTicker = async (source: ETickerSource, marketCode: string) => {
-  const response = await fetch(buildTickerUrl(source, marketCode));
-  if (response.status !== 200) {
-    throw new Error('Server error');
-  }
-  const data = await response.json();
-  switch (source) {
-    case ETickerSource.ZONDACRYPTO:
-      return processZondaCryptoTicker(data);
-    case ETickerSource.BINANCE:
-      return processBinanceTicker(data);
-    case ETickerSource.BITTREX:
-      return processBittrexTicker(data);
-    default:
-      throw new Error('Unknown ticker source');
+  try {
+    const response = await fetch(buildTickerUrl(source, marketCode));
+    if (response.status !== 200) {
+      throw new Error('Server error');
+    }
+    const data = await response.json();
+    switch (source) {
+      case ETickerSource.ZONDACRYPTO:
+        return processZondaCryptoTicker(data);
+      case ETickerSource.BINANCE:
+        return processBinanceTicker(data);
+      case ETickerSource.BITTREX:
+        return processBittrexTicker(data);
+      default:
+        throw new Error('Unknown ticker source');
+    }
+  } catch {
+    return null;
   }
 };
 
