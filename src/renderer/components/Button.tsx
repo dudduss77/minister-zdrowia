@@ -3,6 +3,7 @@ interface Props {
   children?: React.ReactNode;
   onClick: () => void;
   loading?: boolean;
+  className?: string;
 }
 
 export const Button: React.FC<Props> = ({
@@ -10,12 +11,13 @@ export const Button: React.FC<Props> = ({
   onClick,
   color,
   loading,
+  className,
 }) => {
   const colorClass = color;
   return (
     <button
       onClick={onClick}
-      className={`h-9 w-40 px-3 text-white flex items-center justify-center font-semibold border rounded-md ${colorClass}`}
+      className={`h-9 px-3 text-white flex items-center justify-center font-semibold border rounded-md ${colorClass} ${className}`}
     >
       {loading ? (
         <svg
@@ -30,7 +32,7 @@ export const Button: React.FC<Props> = ({
             cy="12"
             r="10"
             stroke="currentColor"
-            stroke-width="4"
+            strokeWidth="4"
           ></circle>
           <path
             className="opacity-75"
