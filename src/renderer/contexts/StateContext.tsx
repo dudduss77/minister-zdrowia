@@ -12,9 +12,10 @@ type Props = {
   children: ReactNode;
 };
 
-export const StateProvider = ({ children }: Props) => {
+const StateProvider = ({ children }: Props) => {
   const [cryptoObject, setCryptoObject] = useState<TCryptoObject>({
     ID: null,
+    organizationName: null,
     raportName: 'Szacowanie wartości kryptoaktywów',
     dateOfGenerate: null,
     reasonNumber: null,
@@ -30,3 +31,5 @@ export const StateProvider = ({ children }: Props) => {
     </StateContext.Provider>
   );
 };
+
+export default StateProvider

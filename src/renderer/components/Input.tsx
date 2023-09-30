@@ -15,11 +15,13 @@ const Input = ({
   inputValue,
   inputName,
   inputErrorMessage,
-  inputLabel
+  inputLabel,
 }: IInput) => {
   return (
-    <div className='relative'>
-      <label className='px-1 text-xs absolute bg-white top-[-0.5rem] left-3'>{inputLabel}</label>
+    <div className="relative">
+      <label className="px-1 text-xs absolute bg-white top-[-0.5rem] left-3">
+        {inputLabel}
+      </label>
       <div>
         <input
           type="text"
