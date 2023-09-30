@@ -6,7 +6,7 @@ interface IInputSelect {
   inputSelectValue: string;
   inputSelectName: string;
   inputSelectErrorMessage: string;
-  CryptoList: any;
+  OptionsList: any;
 }
 
 const InputSelect = ({
@@ -15,7 +15,7 @@ const InputSelect = ({
   inputSelectValue,
   inputSelectName,
   inputSelectErrorMessage,
-  CryptoList,
+  OptionsList,
 }: IInputSelect) => {
   //   const [showOptions, setShowOptions] = useState(false);
   //   const [selectItem, setSelectItem] = useState(inputSelectValue);
@@ -78,10 +78,13 @@ const InputSelect = ({
         }}
         placeholder={inputSelectPlaceholder}
         value={inputSelectValue}
-        onChange={inputSelectOnChange}
+        onChange={(e) => inputSelectOnChange(e.target.value)}
         name={inputSelectName}
       >
-        {CryptoList.map((value: any) => (
+        <option key="default" value="">
+          {inputSelectPlaceholder}
+        </option>
+        {OptionsList.map((value: any) => (
           <option key={value.shortname} className="p-2" value={value.shortname}>
             {value.name}
           </option>

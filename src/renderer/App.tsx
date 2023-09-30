@@ -2,8 +2,10 @@ import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css';
 import { StepFirst } from './components/StepFirst';
 import ExchangeRates from './components/ExchangeRates';
+import InputCryptoWrapper from './components/InputCryptoWrapper';
 import { StepSecond } from './components/StepSecond';
 import { StepRaport } from './components/StepRaport';
+import StateProvider from './contexts/StateContext';
 // import { useState } from 'react';
 // import RemoveButton from './components/RemoveButton';
 // import FormikTest from './components/FormikTest';
@@ -35,12 +37,16 @@ function Hello() {
 export default function App() {
   return (
     <Router>
+      <StateProvider>
       <Routes>
-        {/* <Route path="/" element={<Hello />} /> */}
-        <Route path="/" element={<StepFirst />} />
-        <Route path="/second-step" element={<StepSecond />} />
-        <Route path="/raport" element={<StepRaport />} />
+          
+          {/* <Route path="/" element={<Hello />} /> */}
+          <Route path="/" element={<StepFirst />} />
+          <Route path="/second-step" element={<StepSecond />} />
+          <Route path="/raport" element={<StepRaport />} />
+          
       </Routes>
+      </StateProvider>
     </Router>
   );
 }

@@ -1,9 +1,10 @@
 interface Props {
   color: string;
   children?: React.ReactNode;
-  onClick: () => void;
+  onClick?: () => void;
   loading?: boolean;
   className?: string;
+  type?: 'submit' | 'button' | 'reset';
 }
 
 export const Button: React.FC<Props> = ({
@@ -12,10 +13,12 @@ export const Button: React.FC<Props> = ({
   color,
   loading,
   className,
+  type = 'button',
 }) => {
   const colorClass = color;
   return (
     <button
+      type={type}
       onClick={onClick}
       className={`h-9 px-3 text-white flex items-center justify-center font-semibold border rounded-md ${colorClass} ${className}`}
     >

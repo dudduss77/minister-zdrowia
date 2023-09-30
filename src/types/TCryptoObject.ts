@@ -9,10 +9,11 @@ export type TCrypto = {
 
 export type TCryptoObject = {
   ID: string | null;
-  raportName: 'Szacowanie wartości kryptoaktywów';
-  dateOfGenerate: string | null; // Date
+  organizationName: string | null;
   reasonNumber: string | null;
   ownersData: string | null;
+  raportName: 'Szacowanie wartości kryptoaktywów';
+  dateOfGenerate: string | null; // Date
   averagePrice: number | null;
   averageNbpExchangeRate: number | null;
   cryptos: TCrypto[];
