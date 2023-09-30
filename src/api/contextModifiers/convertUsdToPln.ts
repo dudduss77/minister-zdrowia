@@ -2,7 +2,10 @@ import { TCryptoObject } from '../../types/TCryptoObject';
 import getExchangeRate from '../requests/getExchangeRate';
 
 const convertUsdToPln = async (cryptoObject: TCryptoObject) => {
-  const plnExchangeRate = await getExchangeRate();
+  if (!cryptoObject.averageNbpExchangeRate) {
+    const plnExchangeRate = await getExchangeRate();
+    cryptoObject.averageNbpExchangeRate = plnExchangeRate.mid;
+  }
 
   cryptoObject.cryptos.forEach((crypto) => {
     crypto.exchangeRate.forEach((exchangeRate) => {
@@ -11,7 +14,8 @@ const convertUsdToPln = async (cryptoObject: TCryptoObject) => {
       }
 
       if (exchangeRate.currency === 'USD') {
-        exchangeRate.value *= plnExchangeRate.mid;
+        exchangeRate.value *= cryptoObject.averageNbpExchangeRate!;
+        exchangeRate.value = +exchangeRate.value.toFixed(2);
         exchangeRate.currency = 'PLN';
       }
     });

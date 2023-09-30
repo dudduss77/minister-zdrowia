@@ -1,6 +1,8 @@
 import ETickerSource from '../../types/ETickerSource';
 import { TCryptoObject } from '../../types/TCryptoObject';
 import getTicker from '../requests/getTicker';
+import calculateFinalValue from './calculateFinalValue';
+import convertUsdToPln from './convertUsdToPln';
 
 const generateReport = async (cryptoObject: TCryptoObject) => {
   // const xd = {
@@ -37,4 +39,10 @@ const generateReport = async (cryptoObject: TCryptoObject) => {
       crypto.exchangeRate.push(zondacrypto);
     }
   });
+
+  convertUsdToPln(cryptoObject);
+
+  calculateFinalValue(cryptoObject);
 };
+
+export default generateReport;
