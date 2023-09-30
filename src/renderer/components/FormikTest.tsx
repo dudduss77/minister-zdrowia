@@ -4,23 +4,38 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import InputSelect from './InputSelect';
 import { StaticCryptoList } from '../static/StaticCryptoSelect';
+import InputCryptoWrapper from './InputCryptoWrapper';
 
 const TestSchema = Yup.object().shape({
   testName: Yup.string().required('Pole wymagane'),
-  currency: Yup.string().required('Pole wymagane'),
+  test: Yup.array().of(
+    Yup.object().shape({
+      shortname: Yup.string().required('Pole wymagane'),
+    }),
+  ),
 });
 
 const FormikTest = () => {
   const formik = useFormik({
     initialValues: {
       testName: '',
-      currency: '',
+      test: [
+        {
+          shortname: '',
+        },
+        {
+          shortname: '',
+        },
+      ],
     },
     validationSchema: TestSchema,
     onSubmit: (values) => {
       console.log(values);
     },
   });
+
+  console.log(formik.errors.test);
+  console.log(formik.values);
   return (
     <div>
       <Input
@@ -38,16 +53,38 @@ const FormikTest = () => {
 
       <InputSelect
         inputSelectPlaceholder="Wybierz kryptowalute"
-        inputSelectOnChange={formik.handleChange}
-        inputSelectValue={formik.values.currency}
-        inputSelectName="currency"
+        inputSelectOnChange={(value: any) =>
+          (formik.values.test[0].shortname = value)
+        }
+        inputSelectValue={formik.values.test[0].shortname}
+        inputSelectName={`test.0`}
         inputSelectErrorMessage={
-          formik.errors.currency && formik.touched.currency
-            ? formik.errors.currency
+          ''
+          // formik.errors.test && formik.touched.test
+          //   ? formik.errors.test
+          //   : ''
+        }
+        OptionsList={StaticCryptoList}
+      />
+
+      <InputSelect
+        inputSelectPlaceholder="Wybierz kryptowalute"
+        inputSelectOnChange={(value: any) =>
+          (formik.values.test[1].shortname = value)
+        }
+        inputSelectValue={formik.values.test[1].shortname}
+        inputSelectName={`test.1`}
+        inputSelectErrorMessage={
+          
+          (formik.errors.test?.[1] as any)?.shortname && (formik.touched.test?.[1] as any).shortname
+            ? (formik.errors.test?.[1] as any).shortname
             : ''
         }
-        CryptoList={StaticCryptoList}
+        OptionsList={StaticCryptoList}
       />
+
+      {/* <InputCryptoWrapper/> */}
+
       <button onClick={() => formik.handleSubmit()}>Test</button>
     </div>
   );

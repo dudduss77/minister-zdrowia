@@ -6,6 +6,7 @@ import FormikTest from './components/FormikTest';
 
 import { Button } from './components/Button';
 import ExchangeRates from './components/ExchangeRates';
+import InputCryptoWrapper from './components/InputCryptoWrapper';
 
 function Hello() {
   const [loading, setLoading] = useState(false);
