@@ -1,91 +1,113 @@
 import React from 'react';
 import Input from './Input';
-import { useFormik } from 'formik';
+import {
+  ErrorMessage,
+  Field,
+  FieldArray,
+  Form,
+  Formik,
+  useFormik,
+} from 'formik';
 import * as Yup from 'yup';
 import InputSelect from './InputSelect';
 import { StaticCryptoList } from '../static/StaticCryptoSelect';
 import InputCryptoWrapper from './InputCryptoWrapper';
 
 const TestSchema = Yup.object().shape({
-  testName: Yup.string().required('Pole wymagane'),
   test: Yup.array().of(
     Yup.object().shape({
       shortname: Yup.string().required('Pole wymagane'),
+      quantity: Yup.number().required('Pole wymagane'),
     }),
   ),
 });
 
 const FormikTest = () => {
-  const formik = useFormik({
-    initialValues: {
-      testName: '',
-      test: [
-        {
-          shortname: '',
-        },
-        {
-          shortname: '',
-        },
-      ],
-    },
-    validationSchema: TestSchema,
-    onSubmit: (values) => {
-      console.log(values);
-    },
-  });
+  // const formik = useFormik({
+  //   initialValues: {
+  //     testName: '',
+  //     test: [
+  //       {
+  //         shortname: '',
+  //         quantity: '',
+  //       },
+  //       {
+  //         shortname: '',
+  //         quantity: '',
+  //       },
+  //     ],
+  //   },
+  //   validationSchema: TestSchema,
+  //   onSubmit: (values) => {
+  //     console.log(values);
+  //   },
+  // });
 
-  console.log(formik.errors.test);
-  console.log(formik.values);
+  // console.log(formik.errors.test);
+  // console.log(formik.values);
   return (
     <div>
-      <Input
-        inputPlaceholder="Test input"
-        inputOnChange={formik.handleChange}
-        inputName="testName"
-        inputValue={formik.values.testName}
-        inputErrorMessage={
-          formik.errors.testName && formik.touched.testName
-            ? formik.errors.testName
-            : ''
-        }
-        inputLabel="TestName"
-      />
+      <Formik
+        initialValues={{
+          testName: '',
+          test: [
+            {
+              shortname: '',
+              quantity: '',
+            },
+          ],
+        }}
+        validationSchema={TestSchema}
+        onSubmit={(values) => console.log(values)}
+      >
+        {({ values }) => (
+          <Form>
+            <FieldArray name="test">
+              {({ arrayHelpers }) =>
+                values.test.map((test, index) => (
+                  <div key={index}>
+                    <div>
+                      <Field
+                        component="select"
+                        name={`test.${index}.shortname`}
+                      >
+                        <option value="">Wybierz kryptowalute</option>
+                        <option value="BTC">BTC</option>
+                        <option value="ETH">ETH</option>
+                      </Field>
+                      <ErrorMessage name={`test.${index}.shortname`} />
+                    </div>
+                    <div>
+                      <Field
+                        type="number"
+                        name={`test.${index}.quantity`}
+                        placeholder="Wartość"
+                      />
+                      <ErrorMessage name={`test.${index}.quantity`} />
+                    </div>
+                  </div>
+                ))
+              }
+            </FieldArray>
+            <button type="submit">Dodaj</button>
+          </Form>
+          // <Form>
+          //   {/* <Field name="testName" placeholder="Field" />
+          // <ErrorMessage name='testName' /> */}
 
-      <InputSelect
-        inputSelectPlaceholder="Wybierz kryptowalute"
-        inputSelectOnChange={(value: any) =>
-          (formik.values.test[0].shortname = value)
-        }
-        inputSelectValue={formik.values.test[0].shortname}
-        inputSelectName={`test.0`}
-        inputSelectErrorMessage={
-          ''
-          // formik.errors.test && formik.touched.test
-          //   ? formik.errors.test
-          //   : ''
-        }
-        OptionsList={StaticCryptoList}
-      />
+          //   <FieldArray
+          //     name="test"
+          //     render={(arrayHelpers) =>
+          //       values.test.map((test, index) => {
+          //         <Form name={`test.${index}`} />;
+          //       })
+          //     }
+          //   />
 
-      <InputSelect
-        inputSelectPlaceholder="Wybierz kryptowalute"
-        inputSelectOnChange={(value: any) =>
-          (formik.values.test[1].shortname = value)
-        }
-        inputSelectValue={formik.values.test[1].shortname}
-        inputSelectName={`test.1`}
-        inputSelectErrorMessage={
-          
-          (formik.errors.test?.[1] as any)?.shortname && (formik.touched.test?.[1] as any).shortname
-            ? (formik.errors.test?.[1] as any).shortname
-            : ''
-        }
-        OptionsList={StaticCryptoList}
-      />
-
-      {/* <InputCryptoWrapper/> */}
-
-      <button onClick={() => formik.handleSubmit()}>Test</button>
+          //   <button type="submit">Dodaj</button>
+          // </Form>;
+        )}
+      </Formik>
     </div>
   );
 };
