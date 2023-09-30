@@ -1,9 +1,4 @@
-export type TExchangeRate = {
-  link: string;
-  name: string;
-  value: number;
-  currency: 'PLN' | 'USD';
-};
+import { TExchangeRate } from './TExchangeRate';
 
 export type TCrypto = {
   name: string; // Bitcoin
