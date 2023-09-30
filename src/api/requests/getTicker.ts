@@ -17,6 +17,18 @@ const buildTickerUrl = (source: ETickerSource, marketCode: string) => {
   }
 };
 
+const links: Record<ETickerSource, string> = {
+  [ETickerSource.ZONDACRYPTO]: 'https://zondacrypto.com/',
+  [ETickerSource.BINANCE]: 'https://www.binance.com/',
+  [ETickerSource.BITTREX]: 'https://bittrexglobal.com/',
+};
+
+const names: Record<ETickerSource, string> = {
+  [ETickerSource.ZONDACRYPTO]: 'ZondaCrypto',
+  [ETickerSource.BINANCE]: 'Binance',
+  [ETickerSource.BITTREX]: 'Bittrex',
+};
+
 const processZondaCryptoTicker = (ticker: TZondaCryptoTickerReponse) => {
   if (ticker.status === 'Fail') {
     throw new Error(ticker.errors.join(', '));
@@ -24,8 +36,8 @@ const processZondaCryptoTicker = (ticker: TZondaCryptoTickerReponse) => {
 
   const exchangeRate: TExchangeRate = {
     currency: 'USD',
-    link: 'https://zondacrypto.com/',
-    name: 'ZondaCrypto',
+    link: links[ETickerSource.ZONDACRYPTO],
+    name: names[ETickerSource.ZONDACRYPTO],
     value: +ticker.ticker.rate,
   };
   return exchangeRate;
@@ -34,8 +46,8 @@ const processZondaCryptoTicker = (ticker: TZondaCryptoTickerReponse) => {
 const processBinanceTicker = (ticker: TBinanceTickerReponse) => {
   const exchangeRate: TExchangeRate = {
     currency: 'USD',
-    link: 'https://www.binance.com/',
-    name: 'Binance',
+    link: links[ETickerSource.BINANCE],
+    name: names[ETickerSource.BINANCE],
     value: +ticker.price,
   };
   return exchangeRate;
@@ -44,8 +56,8 @@ const processBinanceTicker = (ticker: TBinanceTickerReponse) => {
 const processBittrexTicker = (ticker: TBittrexTickerReponse) => {
   const exchangeRate: TExchangeRate = {
     currency: 'USD',
-    link: 'https://bittrexglobal.com/',
-    name: 'Bittrex',
+    link: links[ETickerSource.BITTREX],
+    name: names[ETickerSource.BITTREX],
     value: +ticker.lastTradeRate,
   };
   return exchangeRate;
@@ -66,10 +78,21 @@ const getTicker = async (source: ETickerSource, marketCode: string) => {
       case ETickerSource.BITTREX:
         return processBittrexTicker(data);
       default:
-        throw new Error('Unknown ticker source');
+        return {
+          link: '',
+          name: '',
+          currency: null,
+          value: null,
+        } as TExchangeRate;
     }
   } catch {
-    return null;
+    const emptyExchangeRate: TExchangeRate = {
+      link: links[source],
+      name: names[source],
+      currency: null,
+      value: null,
+    };
+    return emptyExchangeRate;
   }
 };
 

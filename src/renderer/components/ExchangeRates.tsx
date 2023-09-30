@@ -44,9 +44,6 @@ function ExchangeRates() {
   return (
     <div>
       <select onChange={(e) => setCrypto(e.target.value)}>
-        {/* <option value="BTC">BTC</option>
-        <option value="ETH">ETH</option>
-        <option value="LTC">LTC</option> */}
         {cryptoDictionary.map(({ name, shortName }) => (
           <option key={shortName} value={shortName}>
             {name}
