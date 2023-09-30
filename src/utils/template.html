@@ -1,0 +1,117 @@
+<html>
+    <head>
+      <style>
+        .container {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .containerHeader {
+            padding: 1rem;
+            font-size: 2rem;
+            font-weight: bold   ;
+        }   
+
+        .sumRowSeparator {
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid black;
+        }
+
+        .sumContainer  {
+            padding-top: 1rem;
+        }
+
+        .dataHeader {
+            border: 2px solid black;
+            padding: 0.5rem;
+        }
+
+        .dataContentContainer {
+            border: 1px solid black;
+            margin-left: 0.5rem;
+            margin-right: 0.5rem;
+            font-size: 0.5rem;
+        }
+
+        .row {
+            padding: 0.2rem;
+        }
+
+        .row-header {
+            font-weight: bold;
+            width: 34%;
+            float: left;
+            text-align: end;
+        }
+
+        .row-content {
+            padding-left: 1rem;
+        }
+
+        .small {
+            font-size: 0.5rem;
+        }
+
+        .red {
+            color: red
+        }
+
+        .green {
+            color: green
+        }
+        
+
+      </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="containerHeader">Szacowanie wartości kryptoaktywów</div>
+
+            <div class="data">
+              <div class="dataHeader">
+                Podstawowe dane
+              </div>
+
+              <div class="dataContentContainer">
+                <div class="row">
+                    <span class="row-header">ID: </span>
+                    <span class="row-content"> <#id></span>
+                </div>
+                <div class="row">
+                    <span class="row-header">Data: </span>
+                    <span class="row-content"> <#date></span>
+                </div>
+                <div class="row">
+                    <span class="row-header">Numer sprawy: </span>
+                    <span class="row-content"> <#reasonNumber></span>
+                </div>
+                <div class="row">
+                    <span class="row-header">Dane identyfikujące właściciela kryptoaktywa: </span>
+                    <span class="row-content"> <#ownersData></span>
+                </div>
+              </div>
+
+            </div>
+            </div>
+
+
+            <div class="sumContainer">
+                <#mappedCryptos>
+
+
+                <div class="sumRowSeparator"></div>
+
+                <div class="sumRow">
+                    <span>Suma:</span>
+                    <span><#averagePrice> PLN</span>                    
+                </div>
+                <div class="small">
+                    Szacunkową średnią wartość kryptoaktywa została oszacowana na podstawie średniej wyceny z 3 źródeł*
+                </div>
+
+            </div>
+        </div>
+    </body>
+  </html>

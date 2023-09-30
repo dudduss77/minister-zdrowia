@@ -15,6 +15,7 @@ import StateProvider from './contexts/StateContext';
 // import { Button } from './components/Button';
 // import { StateContext } from './contexts/StateContext';
 
+
 function Hello() {
   return (
     <div className="p-5">
@@ -27,7 +28,7 @@ function Hello() {
         color="bg-red-500"
         className="w-full"
         loading={loading}
-        onClick={() => setLoading(true)}
+        onClick={handleClickGeneratePdf}
       >
         GENERUJ
       </Button> */}
