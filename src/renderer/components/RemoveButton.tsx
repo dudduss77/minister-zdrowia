@@ -6,7 +6,7 @@ const RemoveButton = ({
 }) => {
   return (
     <div>
-      <SubtractAlt className="fill-gray-500 cursor-pointer" size="24" onClick={onClick} />
+      <SubtractAlt className="fill-gray-500 cursor-pointer mt-2.5" size="24" onClick={onClick} />
     </div>
   )
 }
