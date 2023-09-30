@@ -1,5 +1,12 @@
 import { TExchangeRate } from './TExchangeRate';
 
+export type TCrypto = {
+  name: string; // Bitcoin
+  shortName: string; // BTC
+  quantity: number;
+  exchangeRate: TExchangeRate[];
+};
+
 export type TCryptoObject = {
   ID: string;
   raportName: 'Szacowanie wartości kryptoaktywów';
@@ -8,10 +15,5 @@ export type TCryptoObject = {
   ownersData: string;
   averagePrice: number | null;
   averageNbpExchangeRate: number;
-  cryptos: {
-    name: string; // Bitcoin
-    shortName: string; // BTC
-    quantity: number;
-    exchangeRate: TExchangeRate[];
-  }[];
+  cryptos: TCrypto[];
 };
