@@ -1,13 +1,8 @@
+import ETickerSource from '../../types/ETickerSource';
 import { TBinanceTickerReponse } from '../../types/TBinanceTickerResponse';
 import { TBittrexTickerReponse } from '../../types/TBittrexTickerResponse';
 import { TExchangeRate } from '../../types/TExchangeRate';
 import { TZondaCryptoTickerReponse } from '../../types/TZondaCryptoTickerReponse';
-
-enum ETickerSource {
-  ZONDACRYPTO,
-  BINANCE,
-  BITTREX,
-}
 
 const buildTickerUrl = (source: ETickerSource, marketCode: string) => {
   switch (source) {
