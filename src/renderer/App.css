@@ -10,3 +10,7 @@ input, select {
     border: 1px solid #888888;
     border-radius: 0.5rem;
 }
+
+.content-max-height {
+  height: calc(100% - 36px - 12px - 40px);
+}

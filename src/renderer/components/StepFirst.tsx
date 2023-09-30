@@ -58,7 +58,7 @@ export function StepFirst() {
   return (
     // <StateContext.Consumer>
     //   {({ cryptoObject, setCryptoObject }) => (
-    <div className="p-5">
+    <div className="p-5 max-w-screen-md mx-auto h-screen">
       <Formik
         initialValues={{
           organizationName: '',
@@ -89,78 +89,82 @@ export function StepFirst() {
         }}
       >
         {({ values }) => (
-          <Form>
-            <Field
-              name="organizationName"
-              placeholder="Nazwa organu egzekucyjnego"
-            />
-            <div className="text-sm text-red-700">
-              <ErrorMessage name="organizationName" />
-            </div>
+          <Form className="h-full relative flex flex-col">
+            <h1 className="text-xl mb-3 text-center">
+              Uzupełnij dane do raportu
+            </h1>
+            <div className="content-max-height overflow-y-auto">
+              <Field
+                name="organizationName"
+                placeholder="Nazwa organu egzekucyjnego"
+              />
+              <div className="text-sm text-red-700 mb-3">
+                <ErrorMessage name="organizationName" />
+              </div>
+              <Field name="reasonNumber" placeholder="Numer sprawy" />
+              <div className="text-sm text-red-700 mb-3">
+                <ErrorMessage name="reasonNumber" />
+              </div>
+              <Field
+                name="ownersData"
+                placeholder="Dane identyfikujące właściciela kryptoaktywa"
+              />
+              <div className="text-sm text-red-700 mb-3">
+                <ErrorMessage name="ownersData" />
+              </div>
 
-            <Field name="reasonNumber" placeholder="Numer sprawy" />
-            <div className="text-sm text-red-700">
-              <ErrorMessage name="reasonNumber" />
-            </div>
-            <Field
-              name="ownersData"
-              placeholder="Dane identyfikujące właściciela kryptoaktywa"
-            />
-            <div className="text-sm text-red-700">
-              <ErrorMessage name="ownersData" />
-            </div>
-
-            <FieldArray
-              name="cryptos"
-              render={(arrayHelpers) =>
-                values.cryptos.map((crypto, index) => (
-                  <div key={index} className="flex gap-2">
-                    <div>
-                      <Field
-                        component="select"
-                        name={`cryptos.${index}.shortname`}
-                      >
-                        <option value="">Wybierz kryptowalute</option>
-                        {cryptoDictionary.map((val) => (
-                          <option key={val.shortName} value={val.shortName}>
-                            {`${val.name} (${val.shortName})`}
-                          </option>
-                        ))}
-                      </Field>
-                      <div className="text-sm text-red-700">
-                        <ErrorMessage name={`cryptos.${index}.shortname`} />
+              <FieldArray
+                name="cryptos"
+                render={(arrayHelpers) =>
+                  values.cryptos.map((crypto, index) => (
+                    <div key={index} className=" mb-3">
+                      <div className="flex gap-3 mb-3">
+                        <div className="grow">
+                          <Field
+                            component="select"
+                            name={`cryptos.${index}.shortname`}
+                          >
+                            <option value="">Wybierz kryptowalute</option>
+                            {cryptoDictionary.map((val) => (
+                              <option key={val.shortName} value={val.shortName}>
+                                {`${val.name} (${val.shortName})`}
+                              </option>
+                            ))}
+                          </Field>
+                          <div className="text-sm text-red-700">
+                            <ErrorMessage name={`cryptos.${index}.shortname`} />
+                          </div>
+                        </div>
+                        <div className="grow">
+                          <Field
+                            type="number"
+                            name={`cryptos.${index}.quantity`}
+                            placeholder="Wartość"
+                          />
+                          <div className="text-sm text-red-700">
+                            <ErrorMessage name={`cryptos.${index}.quantity`} />
+                          </div>
+                        </div>
+                        {values.cryptos.length > 1 && (
+                          <RemoveButton
+                            onClick={() => arrayHelpers.remove(index)}
+                          />
+                        )}
                       </div>
+                      {index === values.cryptos.length - 1 && (
+                        <Button
+                          color="bg-green-500 mx-auto"
+                          onClick={() => arrayHelpers.push(emptyCrypto)}
+                        >
+                          Dodaj kolejną pozycję
+                        </Button>
+                      )}
                     </div>
-                    <div>
-                      <Field
-                        type="number"
-                        name={`cryptos.${index}.quantity`}
-                        placeholder="Wartość"
-                      />
-                      <div className="text-sm text-red-700">
-                        <ErrorMessage name={`cryptos.${index}.quantity`} />
-                      </div>
-                    </div>
-                    {index > 0 && (
-                      <RemoveButton
-                        onClick={() => arrayHelpers.remove(index)}
-                      />
-                    )}
-
-                    {index === values.cryptos.length - 1 && (
-                      <Button
-                        color="bg-red-500 mt-1"
-                        onClick={() => arrayHelpers.push(emptyCrypto)}
-                      >
-                        Dodaj kolejną pozycję
-                      </Button>
-                    )}
-                  </div>
-                ))
-              }
-            />
-
-            <Button type="submit" color="bg-red-500">
+                  ))
+                }
+              />
+            </div>
+            <Button type="submit" color="bg-blue-500 w-full self-end mt-auto">
               GENERUJ
             </Button>
           </Form>
