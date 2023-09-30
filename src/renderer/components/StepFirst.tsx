@@ -1,6 +1,4 @@
 import { useNavigate } from 'react-router-dom';
-import { Button } from './Button';
-import { StateContext } from '../contexts/StateContext';
 import {
   ErrorMessage,
   Field,
@@ -10,9 +8,12 @@ import {
   useFormik,
 } from 'formik';
 import * as Yup from 'yup';
+import { useContext, useEffect, useRef, useState } from 'react';
+import { Button } from './Button';
+import { StateContext } from '../contexts/StateContext';
 import { cryptoDictionary } from '../../api/consts';
 import RemoveButton from './RemoveButton';
-import { useContext } from 'react';
+import generateReport from '../../api/contextModifiers/generateReport';
 
 const TestSchema = Yup.object().shape({
   organizationName: Yup.string().required('Pole wymagane'),
@@ -36,9 +37,23 @@ const mapDataToContext = (valueToSet: any, setCryptoObject: any) => {
   setCryptoObject({ ...valueToSet });
 };
 
-export const StepFirst = () => {
+export function StepFirst() {
   const navigate = useNavigate();
+  const firstRender = useRef(true);
   const { cryptoObject, setCryptoObject } = useContext(StateContext);
+
+  useEffect(() => {
+    if (firstRender.current) {
+      firstRender.current = false;
+      return;
+    }
+
+    console.log('cryptoObject', cryptoObject);
+    (async () => {
+      await generateReport(cryptoObject);
+      navigate('/second-step');
+    })();
+  }, [cryptoObject]);
 
   return (
     // <StateContext.Consumer>
@@ -69,8 +84,8 @@ export const StepFirst = () => {
             })),
           };
           mapDataToContext(valueToSet, setCryptoObject);
-          //TODO
-          navigate('/second-step');
+          // TODO
+          // navigate('/second-step');
         }}
       >
         {({ values }) => (
@@ -159,4 +174,4 @@ export const StepFirst = () => {
     // )}
     // </StateContext.Consumer>
   );
-};
+}
