@@ -72,8 +72,9 @@ const FormikTest = () => {
                         name={`test.${index}.shortname`}
                       >
                         <option value="">Wybierz kryptowalute</option>
-                        <option value="BTC">BTC</option>
-                        <option value="ETH">ETH</option>
+                        <option value="BTC">Bitcoin</option>
+                        <option value="ETH">Etherum</option>
+                        <option value="CITY">Manchester City Fan Token</option>
                       </Field>
                       <ErrorMessage name={`test.${index}.shortname`} />
                     </div>
