@@ -1,10 +1,11 @@
 import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css';
+import { useState } from 'react';
 import RemoveButton from './components/RemoveButton';
 import FormikTest from './components/FormikTest';
-import { useState } from 'react';
 
 import { Button } from './components/Button';
+import ExchangeRates from './components/ExchangeRates';
 
 function Hello() {
   const [loading, setLoading] = useState(false);
@@ -23,6 +24,7 @@ function Hello() {
       >
         GENERUJ
       </Button>
+      <ExchangeRates />
     </div>
   );
 }
