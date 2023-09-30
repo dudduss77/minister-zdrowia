@@ -1,3 +1,16 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+input, select {
+    width: 100%;
+    padding: 0.5rem;
+    color: black;
+    border: 1px solid #888888;
+    border-radius: 0.5rem;
+}
+
+.content-max-height {
+  height: calc(100% - 36px - 12px - 40px);
+}
