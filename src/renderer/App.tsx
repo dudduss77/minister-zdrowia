@@ -17,6 +17,7 @@ function Hello() {
       <div className="w-36 h-36 bg-red-700">abc</div>
       <Button
         color="bg-red-500"
+        className="w-full"
         loading={loading}
         onClick={() => setLoading(true)}
       >
