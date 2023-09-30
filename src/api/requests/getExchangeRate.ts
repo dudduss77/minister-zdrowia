@@ -7,6 +7,7 @@ const getExchangeRate = async () => {
     throw new Error('Server error');
   }
   const data = (await response.json()) as TExchangeRateResponse;
+  console.log('exchange rate', data.rates[0]);
   return data.rates[0];
 };
 

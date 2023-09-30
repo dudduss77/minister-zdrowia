@@ -1,6 +1,6 @@
 export type TExchangeRate = {
   link: string;
   name: string;
-  value: number;
-  currency: 'PLN' | 'USD';
+  value: number | null;
+  currency: 'PLN' | 'USD' | null;
 };

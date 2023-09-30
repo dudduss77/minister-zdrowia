@@ -6,8 +6,7 @@ export type TExchangeRateResponse = {
     {
       no: string;
       effectiveDate: string; // yyyy-mm-dd
-      bid: number;
-      ask: number;
+      mid: number;
     },
   ];
 };
