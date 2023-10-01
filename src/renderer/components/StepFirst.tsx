@@ -50,12 +50,12 @@ function StepFirst() {
     })();
   }, [cryptoObject, navigate]);
 
-  useEffect(() => {
-    createLog({
-      type: 'START_PROCESS',
-      data: {},
-    });
-  }, []);
+  // useEffect(() => {
+  //   createLog({
+  //     type: 'START_PROCESS',
+  //     data: {},
+  //   });
+  // }, []);
 
   return (
     <div className="p-5 max-w-screen-md mx-auto h-screen">
@@ -74,6 +74,10 @@ function StepFirst() {
         }}
         validationSchema={TestSchema}
         onSubmit={(values) => {
+          createLog({
+            type: 'START_PROCESS',
+            data: {},
+          });
           const valueToSet = {
             ...cryptoObject,
             ...values,
