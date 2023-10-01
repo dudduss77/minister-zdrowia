@@ -88,6 +88,8 @@ const createWindow = async () => {
     show: false,
     width: 1024,
     height: 728,
+    minWidth: 1024,
+    minHeight: 728, 
     icon: getAssetPath('icon.png'),
     webPreferences: {
       webSecurity: false,
@@ -95,8 +97,10 @@ const createWindow = async () => {
         ? path.join(__dirname, 'preload.js')
         : path.join(__dirname, '../../.erb/dll/preload.js'),
       contextIsolation: true,
+      devTools: false, 
     },
   });
+
 
   mainWindow.loadURL(resolveHtmlPath('index.html'));
 
