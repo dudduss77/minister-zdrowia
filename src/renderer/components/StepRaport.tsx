@@ -1,7 +1,17 @@
+import { useEffect } from 'react';
 import { StateContext } from '../contexts/StateContext';
 import { Button } from './Button';
+import { createLog } from '../utils/createLog';
 
 export const StepRaport = () => {
+
+  useEffect(() => {
+    createLog({
+      type: 'UPDATE_DATA',
+      data: {}
+    })
+  }, [])
+  
   return (
     <StateContext.Consumer>
       {({ cryptoObject, setCryptoObject }) => (

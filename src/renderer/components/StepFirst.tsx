@@ -14,6 +14,7 @@ import { StateContext } from '../contexts/StateContext';
 import { cryptoDictionary } from '../../api/consts';
 import RemoveButton from './RemoveButton';
 import generateReport from '../../api/contextModifiers/generateReport';
+import { createLog } from '../utils/createLog';
 
 const TestSchema = Yup.object().shape({
   organizationName: Yup.string().required('Pole wymagane'),
@@ -54,6 +55,13 @@ export function StepFirst() {
       navigate('/second-step');
     })();
   }, [cryptoObject]);
+
+  useEffect(() => {
+  createLog({
+    type: 'START_PROCESS',
+    data: {}
+  })
+}, [])  
 
   return (
     // <StateContext.Consumer>
