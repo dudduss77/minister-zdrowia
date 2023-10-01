@@ -16,9 +16,14 @@ const calculateFinalValue = (cryptoObject: TCryptoObject) => {
       }
     });
 
+    if (marketValues.length === 0) {
+      return;
+    }
     totalValue += marketValues.reduce((a, b) => a + b, 0) / marketValues.length;
   });
-
+  if (!totalValue) {
+    return;
+  }
   cryptoObject.averagePrice = +totalValue.toFixed(2);
 };
 
