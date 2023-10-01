@@ -28,7 +28,7 @@ const InputCryptoWrapper = () => {
   return (
     <div className="flex">
       <InputSelect
-        inputSelectPlaceholder="Wybierz kryptowalute"
+        inputSelectPlaceholder="Wybierz kryptowalutę"
         inputSelectOnChange={formik.handleChange}
         inputSelectValue={formik.values.cryptoShortname}
         inputSelectName="cryptoShortname"
