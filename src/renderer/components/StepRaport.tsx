@@ -2,7 +2,6 @@ import { useContext, useEffect } from 'react';
 import { StateContext } from '../contexts/StateContext';
 import { Button } from './Button';
 import { createLog } from '../utils/createLog';
-import { generatePdf } from '../../utils/pdfService';
 
 export const StepRaport = () => {
   const { cryptoObject, setCryptoObject } = useContext(StateContext);

@@ -1,26 +1,34 @@
-
-const fs = require('fs')
-const LOGS_PATH = __dirname + '/logs.csv'
+const fs = require('fs');
 
 export const LOGS_TYPES = {
-    REPORT: 'REPORT',
-    START_PROCESS: 'START_PROCESS',
-    SET_DATA: 'SET_DATA',
-    UPDATE_DATA: 'UPDATE_DATA'
-}
+  REPORT: 'REPORT',
+  START_PROCESS: 'START_PROCESS',
+  SET_DATA: 'SET_DATA',
+  UPDATE_DATA: 'UPDATE_DATA',
+};
 
-export const createLog = (logData) => {
-    if(!fs.existsSync(LOGS_PATH)) {
-        fs.writeFileSync(LOGS_PATH, '')
+export const createLog = (logData, userDataPath) => {
+  let logsPath = __dirname + '/logs.csv';
+  if (fs.existsSync(userDataPath + '/userConfig.json')) {
+    const path = fs.readFileSync(userDataPath + '/userConfig.json', 'utf8');
+    if (path) {
+      const newPath = JSON.parse(path);
+      logsPath = newPath.userPath + '/logs.csv';
     }
-    
-    const logs = fs.readFileSync(LOGS_PATH,'utf8');
-    const { type, data } = logData
-    const date = new Date()
+  }
 
-    const toSave = date + "||" + type + " || " + JSON.stringify(data) + '\n'
-    console.log(toSave)
+  if (!fs.existsSync(logsPath)) {
+    fs.writeFileSync(logsPath, '');
+  }
 
-    fs.appendFileSync(LOGS_PATH, toSave)
+  if (fs.existsSync(logsPath)) {
+    const logs = fs.readFileSync(logsPath, 'utf8');
+    const { type, data } = logData;
+    const date = new Date();
 
-}
+    const toSave = date + '||' + type + ' || ' + JSON.stringify(data) + '\n';
+    console.log(toSave);
+
+    fs.appendFileSync(logsPath, toSave);
+  }
+};
