@@ -47,8 +47,10 @@ function MyAutocomplete() {
 
 const TestSchema = Yup.object().shape({
   organizationName: Yup.string().required('Pole wymagane'),
-  reasonNumber: Yup.string().required('Pole wymagane'),
-  ownersData: Yup.string().required('Pole wymagane'),
+  reasonNumber: Yup.string()
+    .required('Pole wymagane')
+    .max(100, 'Pole za długie'),
+  ownersData: Yup.string().required('Pole wymagane').max(100, 'Pole za długie'),
   cryptos: Yup.array().of(
     Yup.object().shape({
       shortName: Yup.string().required('Pole wymagane'),
