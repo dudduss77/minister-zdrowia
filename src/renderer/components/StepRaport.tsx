@@ -6,7 +6,7 @@ import { createLog } from '../utils/createLog';
 import generatePDF from 'react-to-pdf';
 
 const options = {
-  method: 'build'
+  method: 'build',
 };
 
 const getTargetElement = () => document.getElementById('PDF_Raport');
@@ -23,10 +23,13 @@ export const StepRaport = () => {
 
   const handleClick = async () => {
     const a = await generatePDF(getTargetElement, options);
-    // window.electron.ipcRenderer.sendMessage('generate-pdf', a.output(''));
+    console.log(a.output('arraybuffer'));
+    window.electron.ipcRenderer.sendMessage('generate-pdf', {
+      blob: a.output('arraybuffer'),
+      id: cryptoObject?.ID,
+    });
     // toPDF();
-    console.log(a.output("datauri"))
-    
+    // console.log(a.output("datauri"))
   };
 
   return (
@@ -34,13 +37,9 @@ export const StepRaport = () => {
 
     <div className="p-5 ">
       {/* <pre>{`${JSON.stringify(cryptoObject)}`}</pre> */}
-      <div className='p-5' id="PDF_Raport">
-      <h1 className="text-3xl text-center">
-          Raport
-        </h1>
-        <h1 className="text-3xl text-center">
-          {cryptoObject?.raportName}
-        </h1>
+      <div className="p-5" id="PDF_Raport">
+        <h1 className="text-3xl text-center">Raport {cryptoObject?.ID}</h1>
+        <h1 className="text-3xl text-center">{cryptoObject?.raportName}</h1>
         <div className="flex flex-col pt-10">
           <span>
             <label className="font-bold">Nazwa organu egzekucyjnego:</label>{' '}
@@ -138,7 +137,10 @@ export const StepRaport = () => {
         <h2 className="text-2xl text-right">
           Suma: {cryptoObject?.averagePrice} PLN
         </h2>
-        <span className='text-xs'>Szacunkową średnią wartość kryptoaktywa została oszacowana na podstawie średniej wyceny z 3 źródeł*</span>
+        <span className="text-xs">
+          Szacunkową średnią wartość kryptoaktywa została oszacowana na
+          podstawie średniej wyceny z 3 źródeł*
+        </span>
       </div>
 
       <Button color="bg-red-500" onClick={handleClick}>

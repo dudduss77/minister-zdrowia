@@ -16,7 +16,7 @@ function getCurrentDate() {
 }
 
 export const generatePdf = async (data, userDataPath) => {
-  if (!data) return;
+  if (!data || !data.blob || data.id === undefined) return;
 
   let pdfPath = __dirname;
   console.log(userDataPath + '/userConfig.json');
@@ -28,16 +28,26 @@ export const generatePdf = async (data, userDataPath) => {
     }
   }
 
-  const arrayBuffer = await data.arrayBuffer();
-  const newData = new Int8Array(arrayBuffer);
-  fs.writeFileSync(pdfPath, data);
-  createLog(
-    {
-      type: 'REPORT',
-      data: { id },
+  fs.writeFileSync(
+    pdfPath + '/' + data.id + '.pdf',
+    Buffer.from(data.blob),
+    (error) => {
+      if (error) {
+        throw error;
+      } else {
+        console.log('buffer saved!');
+      }
     },
-    userDataPath,
   );
+
+  // fs.writeFileSync(pdfPath, data);
+  // createLog(
+  //   {
+  //     type: 'REPORT',
+  //     data: { 'id' },
+  //   },
+  //   userDataPath,
+  // );
 
   //   let html = fs.readFileSync(__dirname + '/template.html', 'utf8');
 
