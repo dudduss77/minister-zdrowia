@@ -1,7 +1,7 @@
 import ETickerSource from '../../types/ETickerSource';
 import { TCryptoObject } from '../../types/TCryptoObject';
 import getTicker from '../requests/getTicker';
-// import addFieldsToExchangeRate from './addFieldsToExchangeRate';
+import addFieldsToExchangeRate from './addFieldsToExchangeRate';
 import calculateFinalValue from './calculateFinalValue';
 import convertUsdToPln from './convertUsdToPln';
 
@@ -27,7 +27,7 @@ const generateReport = async (
   //   ],
   // };
 
-  cryptoObject.cryptos.forEach(async (crypto) => {
+  const pobierz = cryptoObject.cryptos.map(async (crypto) => {
     const [binance, bittrex, zondacrypto] = await Promise.all([
       getTicker(ETickerSource.BINANCE, crypto.shortName),
       getTicker(ETickerSource.BITTREX, crypto.shortName),
@@ -51,11 +51,12 @@ const generateReport = async (
     await convertUsdToPln(cryptoObject);
 
     calculateFinalValue(cryptoObject);
-
-    // addFieldsToExchangeRate(cryptoObject);
-    console.log(cryptoObject);
-    callback();
   });
+
+  await Promise.allSettled(pobierz);
+  addFieldsToExchangeRate(cryptoObject);
+  console.log(cryptoObject);
+  callback();
 };
 
 export default generateReport;

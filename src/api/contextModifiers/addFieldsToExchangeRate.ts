@@ -6,14 +6,23 @@ const addFieldsToExchangeRate = (cryptoObject: TCryptoObject) => {
     link: '',
     name: '',
     currency: 'PLN',
-    value: null,
+    value: 0,
   };
 
+  let id = 0;
   cryptoObject.cryptos.forEach((crypto) => {
     const filteredArray = crypto.exchangeRate.filter(
-      (el) => el.value === null && !el.name && !el.link,
+      (el) => el.value === null && !el.id,
     );
-    const newArray = filteredArray.map(() => emptyField);
+    const newArray: TExchangeRate[] = [];
+    filteredArray.forEach(() => {
+      newArray.push({
+        ...emptyField,
+        id,
+        label: `${crypto.name} (${crypto.shortName})`,
+      });
+      id++;
+    });
 
     crypto.exchangeRate = [...crypto.exchangeRate, ...newArray];
   });

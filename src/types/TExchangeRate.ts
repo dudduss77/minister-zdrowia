@@ -3,4 +3,6 @@ export type TExchangeRate = {
   name: string;
   value: number | null;
   currency: 'PLN' | 'USD' | null;
+  id?: number;
+  label?: string;
 };
