@@ -183,7 +183,7 @@ export const StepRaport = () => {
       </div>
 
       <Button color="bg-red-500" onClick={handleClick}>
-        POBIERZ PDF
+        ZAPISZ PDF
       </Button>
     </div>
     // </StateContext.Consumer>
