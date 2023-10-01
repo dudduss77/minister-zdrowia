@@ -19,3 +19,9 @@ table,  th {
     border: 1px solid;
     text-align: center;
 }
+
+.zero-margin {
+  @apply px-1;
+  margin: 0 !important;
+  height: 50px;
+}
