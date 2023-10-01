@@ -1,6 +1,6 @@
 import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css';
-import { StepFirst } from './components/StepFirst';
+import StepFirst from './components/StepFirst';
 import ExchangeRates from './components/ExchangeRates';
 import InputCryptoWrapper from './components/InputCryptoWrapper';
 import { StepSecond } from './components/StepSecond';
