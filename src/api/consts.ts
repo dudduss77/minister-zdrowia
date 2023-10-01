@@ -44,10 +44,6 @@ export const cryptoDictionary: TCryproDictionaryItem[] = [
     name: 'Solana',
     shortName: 'SOL',
   },
-  {
-    name: 'Manchester City Fan Token',
-    shortName: 'CITY',
-  },
 ];
 
 export const ErrTickerNotFound = 'TICKER_NOT_FOUND';

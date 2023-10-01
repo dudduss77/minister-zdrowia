@@ -1,14 +1,7 @@
 import { useNavigate } from 'react-router-dom';
-import {
-  ErrorMessage,
-  Field,
-  FieldArray,
-  Form,
-  Formik,
-  useFormik,
-} from 'formik';
+import { ErrorMessage, Field, FieldArray, Form, Formik } from 'formik';
 import * as Yup from 'yup';
-import { useContext, useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useRef } from 'react';
 import { Button } from './Button';
 import { StateContext } from '../contexts/StateContext';
 import { cryptoDictionary } from '../../api/consts';
@@ -38,7 +31,7 @@ const mapDataToContext = (valueToSet: any, setCryptoObject: any) => {
   setCryptoObject({ ...valueToSet });
 };
 
-export function StepFirst() {
+function StepFirst() {
   const navigate = useNavigate();
   const firstRender = useRef(true);
   const { cryptoObject, setCryptoObject } = useContext(StateContext);
@@ -50,18 +43,19 @@ export function StepFirst() {
     }
 
     console.log('cryptoObject', cryptoObject);
+    if (!cryptoObject) return;
     (async () => {
       await generateReport(cryptoObject);
       navigate('/second-step');
     })();
-  }, [cryptoObject]);
+  }, [cryptoObject, navigate]);
 
   useEffect(() => {
-  createLog({
-    type: 'START_PROCESS',
-    data: {}
-  })
-}, [])  
+    createLog({
+      type: 'START_PROCESS',
+      data: {},
+    });
+  }, []);
 
   return (
     // <StateContext.Consumer>
@@ -125,7 +119,7 @@ export function StepFirst() {
                 name="cryptos"
                 render={(arrayHelpers) =>
                   values.cryptos.map((crypto, index) => (
-                    <div key={index} className=" mb-3">
+                    <div key={`div-${crypto.name}`} className=" mb-3">
                       <div className="flex gap-3 mb-3">
                         <div className="grow">
                           <Field
@@ -183,3 +177,5 @@ export function StepFirst() {
     // </StateContext.Consumer>
   );
 }
+
+export default StepFirst;
