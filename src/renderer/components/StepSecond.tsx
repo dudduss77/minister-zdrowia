@@ -6,6 +6,8 @@ import { useContext } from 'react';
 import { TExchangeRate } from '../../types/TExchangeRate';
 import { ErrorMessage, Field, FieldArray, Form, Formik } from 'formik';
 import regenerateReport from '../../api/contextModifiers/regenerateReport';
+import { useEffect } from 'react';
+import { createLog } from '../utils/createLog';
 
 export const StepSecond = () => {
   const navigate = useNavigate();
@@ -57,6 +59,13 @@ export const StepSecond = () => {
     if (setCryptoObject) setCryptoObject(copy);
     regenerateReport(cryptoObject, () => navigate('/raport'));
   };
+
+  useEffect(() => {
+    createLog({
+      type: 'SET_DATA',
+      data: {},
+    });
+  }, []);
 
   return (
     <div className="p-5 max-w-screen-md mx-auto h-screen">

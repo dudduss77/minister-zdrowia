@@ -14,6 +14,8 @@ import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
+import { generatePdf } from '../utils/pdfService';
+import { createLog } from '../utils/logs';
 
 class AppUpdater {
   constructor() {
@@ -29,6 +31,17 @@ ipcMain.on('ipc-example', async (event, arg) => {
   const msgTemplate = (pingPong: string) => `IPC test: ${pingPong}`;
   console.log(msgTemplate(arg));
   event.reply('ipc-example', msgTemplate('pong'));
+});
+
+
+ipcMain.on('generate-pdf', (event, arg) => {
+  console.log('Received data from render process:', arg);
+  generatePdf(arg)
+});
+
+ipcMain.on('create-log', (event, arg) => {
+  console.log('Received data from render process:', arg);
+  createLog(arg)
 });
 
 if (process.env.NODE_ENV === 'production') {
@@ -79,6 +92,7 @@ const createWindow = async () => {
       preload: app.isPackaged
         ? path.join(__dirname, 'preload.js')
         : path.join(__dirname, '../../.erb/dll/preload.js'),
+      contextIsolation: true,
     },
   });
 

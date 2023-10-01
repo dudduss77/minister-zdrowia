@@ -13,6 +13,10 @@ export const cryptoDictionary: TCryproDictionaryItem[] = [
     shortName: 'ETH',
   },
   {
+    name: 'Manchester City Fan Token',
+    shortName: 'CITY',
+  },
+  {
     name: 'Tether',
     shortName: 'USDT',
   },
@@ -45,3 +49,5 @@ export const cryptoDictionary: TCryproDictionaryItem[] = [
     shortName: 'CITY',
   },
 ];
+
+export const ErrTickerNotFound = 'TICKER_NOT_FOUND';

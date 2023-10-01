@@ -7,6 +7,7 @@ import { StateContext } from '../contexts/StateContext';
 import { cryptoDictionary } from '../../api/consts';
 import RemoveButton from './RemoveButton';
 import generateReport from '../../api/contextModifiers/generateReport';
+import { createLog } from '../utils/createLog';
 
 const TestSchema = Yup.object().shape({
   organizationName: Yup.string().required('Pole wymagane'),
@@ -30,7 +31,7 @@ const mapDataToContext = (valueToSet: any, setCryptoObject: any) => {
   setCryptoObject({ ...valueToSet });
 };
 
-export function StepFirst() {
+function StepFirst() {
   const navigate = useNavigate();
   const firstRender = useRef(true);
   const { cryptoObject, setCryptoObject } = useContext(StateContext);
@@ -41,12 +42,20 @@ export function StepFirst() {
       return;
     }
 
+    if (!cryptoObject) return;
     (async () => {
       if (cryptoObject) {
         await generateReport(cryptoObject, () => navigate('/second-step'));
       }
     })();
-  }, [cryptoObject]);
+  }, [cryptoObject, navigate]);
+
+  useEffect(() => {
+    createLog({
+      type: 'START_PROCESS',
+      data: {},
+    });
+  }, []);
 
   return (
     <div className="p-5 max-w-screen-md mx-auto h-screen">
@@ -106,7 +115,7 @@ export function StepFirst() {
                 name="cryptos"
                 render={(arrayHelpers) =>
                   values.cryptos.map((crypto, index) => (
-                    <div key={index} className=" mb-3">
+                    <div key={`div-${crypto.name}`} className=" mb-3">
                       <div className="flex gap-3 mb-3">
                         <div className="grow">
                           <Field
@@ -162,3 +171,5 @@ export function StepFirst() {
     </div>
   );
 }
+
+export default StepFirst;
