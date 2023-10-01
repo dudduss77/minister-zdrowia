@@ -9,13 +9,14 @@
  * `./src/main.js` using webpack. This gives us some performance wins.
  */
 import path from 'path';
-import { app, BrowserWindow, shell, ipcMain } from 'electron';
+import { app, BrowserWindow, shell, ipcMain, dialog } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
 import { generatePdf } from '../utils/pdfService';
 import { createLog } from '../utils/logs';
+import fs from 'fs';
 
 class AppUpdater {
   constructor() {
@@ -33,15 +34,16 @@ ipcMain.on('ipc-example', async (event, arg) => {
   event.reply('ipc-example', msgTemplate('pong'));
 });
 
-
 ipcMain.on('generate-pdf', (event, arg) => {
   console.log('Received data from render process:', arg);
-  generatePdf(arg)
+  const userData = app.getPath('userData');
+  if (userData) generatePdf(arg, userData);
 });
 
 ipcMain.on('create-log', (event, arg) => {
   console.log('Received data from render process:', arg);
-  createLog(arg)
+  const userData = app.getPath('userData');
+  if (userData) createLog(arg, userData);
 });
 
 if (process.env.NODE_ENV === 'production') {
@@ -98,10 +100,27 @@ const createWindow = async () => {
 
   mainWindow.loadURL(resolveHtmlPath('index.html'));
 
-  mainWindow.on('ready-to-show', () => {
+  mainWindow.on('ready-to-show', async () => {
     if (!mainWindow) {
       throw new Error('"mainWindow" is not defined');
     }
+
+    const userData = app.getPath('userData');
+    if (userData) {
+      if (!fs.existsSync(userData + '/userConfig.json')) {
+        const result = await dialog.showOpenDialog({
+          properties: ['openDirectory'],
+          title: 'Wybierz katalog dla plików wyjściowych',
+        });
+
+        if (!result.canceled && result.filePaths[0])
+          fs.writeFileSync(
+            userData + '/userConfig.json',
+            JSON.stringify({ userPath: result.filePaths[0] }),
+          );
+      }
+    }
+
     if (process.env.START_MINIMIZED) {
       mainWindow.minimize();
     } else {

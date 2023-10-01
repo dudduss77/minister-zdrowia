@@ -4,7 +4,9 @@ import {
   shell,
   BrowserWindow,
   MenuItemConstructorOptions,
+  dialog,
 } from 'electron';
+import fs from 'fs';
 
 interface DarwinMenuItemConstructorOptions extends MenuItemConstructorOptions {
   selector?: string;
@@ -206,6 +208,24 @@ export default class MenuBuilder {
             accelerator: 'Ctrl+W',
             click: () => {
               this.mainWindow.close();
+            },
+          },
+          {
+            label: '&Change path',
+            click: async () => {
+              const userData = app.getPath('userData');
+              if (userData) {
+                const result = await dialog.showOpenDialog({
+                  properties: ['openDirectory'],
+                  title: 'Wybierz katalog dla plików wyjściowych',
+                });
+                if (!result.canceled && result.filePaths[0]) {
+                  fs.writeFileSync(
+                    userData + '/userConfig.json',
+                    JSON.stringify({ userPath: result.filePaths[0] }),
+                  );
+                }
+              }
             },
           },
         ],

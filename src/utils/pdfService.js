@@ -5,7 +5,6 @@ const pdf = require('html-pdf');
 const fs = require('fs');
 
 const OPTIONS = { format: 'Letter' };
-const PATH = __dirname;
 
 function getCurrentDate() {
   const currentDate = new Date();
@@ -15,7 +14,17 @@ function getCurrentDate() {
   return `${day}.${month}.${year}`;
 }
 
-export const generatePdf = (data) => {
+export const generatePdf = (data, userDataPath) => {
+  let pdfPath = __dirname;
+  console.log(userDataPath + '/userConfig.json');
+  if (fs.existsSync(userDataPath + '/userConfig.json')) {
+    const path = fs.readFileSync(userDataPath + '/userConfig.json', 'utf8');
+    if (path) {
+      const newPath = JSON.parse(path);
+      pdfPath = newPath.userPath;
+    }
+  }
+
   let html = fs.readFileSync(__dirname + '/template.html', 'utf8');
 
   const {
@@ -27,14 +36,14 @@ export const generatePdf = (data) => {
     cryptos,
   } = data;
 
-  console.log(averagePrice)
+  console.log(averagePrice);
   const mappedCryptos = cryptos.map((item) => {
     const { quantity, shortName, name, exchangeRate, averagePrice } = item;
     let toReturn = `
             <div class="sumRow">
                 <span>${quantity} ${shortName}:</span>
                 <span>${averagePrice} PLN<span>
-                <span>Kurs NBP: 1 USD = ${averageNbpExchangeRate} PLN</span>                                     
+                <span>Kurs NBP: 1 USD = ${averageNbpExchangeRate} PLN</span>
             </div>
         `;
 
@@ -56,15 +65,13 @@ export const generatePdf = (data) => {
             <div class="small">
                 <span>${link}</span>
                 ${content}
-            </div> 
+            </div>
             `;
     });
 
     toReturn += `
-        <div class="sumRow">     
-            ${mappedExchangeRate.join(
-              '',
-            )}                                             
+        <div class="sumRow">
+            ${mappedExchangeRate.join('')}
         </div>
         `;
 
@@ -100,18 +107,24 @@ export const generatePdf = (data) => {
     .replace('<#averagePrice>', averagePrice)
     .replace('<#mappedCryptos>', mappedCryptos.join(''));
 
+  console.log('ZZZZZZZZZZZZZZZ');
+  console.log(pdfPath);
+
   return new Promise((resolve, reject) => {
     pdf
       .create(html, OPTIONS)
-      .toFile(PATH + '/' + id + '.pdf', function (err, res) {
+      .toFile(pdfPath + '/' + id + '.pdf', function (err, res) {
         if (err) {
           console.log(err);
           return reject(err);
         }
-        createLog({
-          type: 'REPORT',
-          data: { id },
-        });
+        createLog(
+          {
+            type: 'REPORT',
+            data: { id },
+          },
+          userDataPath,
+        );
         console.log(res);
         resolve(res);
       });
