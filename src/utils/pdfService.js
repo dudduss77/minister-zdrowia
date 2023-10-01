@@ -1,5 +1,6 @@
 import { dirname } from 'path';
 import { createLog } from './logs';
+import { html } from './template';
 
 const pdf = require('html-pdf');
 const fs = require('fs');
@@ -48,18 +49,21 @@ export const generatePdf = (data, userDataPath) => {
         `;
 
     const mappedExchangeRate = exchangeRate.map((item) => {
-      const { link, value } = item;
+      const { link, value, currency, isOriginalCurrency } = item;
       // const content = `
       // <span class="green">1 BTC = ${value}</span>
       // <span class="green">( Wartość: ${quantity * value} PLN )</span>
       // <span>- Przeliczono z USD</span>
       // <span class="red">Kryptowaluta nie jest notowana na giełdzie</span>`
       let content = ``;
-      if (value)
-        content = `<span class="green">1 BTC = ${value}</span>
-            // <span class="green">( Wartość: ${quantity * value} PLN )</span>
-            // <span>- Przeliczono z USD</span>`;
-      else
+      if (value) {
+            let totalPrice = quantity * value;
+            totalPrice *= currency === 'USDT' ? averageNbpExchangeRate : 1
+            
+            content = `<span class="green">1 BTC = ${value}</span>
+                <span class="green">( Wartość: ${totalPrice.toFixed(2)} PLN} )</span>`;
+            if(!isOriginalCurrency) content += `<span>- Przeliczono z USD</span>`
+      } else
         content = `<span class="red">Kryptowaluta nie jest notowana na giełdzie</span>`;
       return `
             <div class="small">
