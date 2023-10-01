@@ -61,6 +61,7 @@ export const StepRaport = () => {
             <th className="zero-margin">Kantor/GIełda</th>
             <th className="zero-margin">Link</th>
             <th className="zero-margin">Koszt za jedną kryptowalute</th>
+            <th className="zero-margin">Średni kurs</th>
             <th className="zero-margin">Suma</th>
             <th className="zero-margin">Czy przeliczono z USD?</th>
             <th className="zero-margin">Kurs USD NBP</th>
@@ -104,19 +105,33 @@ export const StepRaport = () => {
                 ))}
               </td>
               <td className="border-r border-b border-solid border-black">
+                <tr>
+                  <td>
+                    {(
+                      crypto.exchangeRate.reduce((acc, cur) => {
+                        const ex =
+                          cur.currency === 'USD'
+                            ? (cur.value || 0) *
+                              (cryptoObject.averageNbpExchangeRate || 0)
+                            : cur.value || 0;
+                        return acc + ex;
+                      }, 0) / 3
+                    ).toFixed(2)}{' '}
+                    PLN
+                  </td>
+                </tr>
+              </td>
+              <td className="border-r border-b border-solid border-black">
                 {crypto.exchangeRate.map((exchange, index) => (
                   <tr key={index}>
                     <td>
                       {exchange.value
                         ? exchange.currency === 'USD'
                           ? (
-                              +(
-                                exchange.value *
-                                +(cryptoObject.averageNbpExchangeRate || 0)
-                              ) * +crypto.quantity
+                              +(cryptoObject.averageNbpExchangeRate || 0) *
+                              +exchange.value
                             ).toFixed(2) + ' PLN'
-                          : (+exchange.value * +crypto.quantity).toFixed(2) +
-                            ' PLN'
+                          : +exchange.value.toFixed(2) + ' PLN'
                         : 'Brak'}
                     </td>
                   </tr>
