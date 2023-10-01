@@ -109,7 +109,8 @@ const createWindow = async () => {
     if (userData) {
       if (!fs.existsSync(userData + '/userConfig.json')) {
         const result = await dialog.showOpenDialog({
-          properties: ['openFile', 'openDirectory'],
+          properties: ['openDirectory'],
+          title: 'Wybierz katalog dla plików wyjściowych',
         });
 
         if (!result.canceled && result.filePaths[0])

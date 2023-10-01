@@ -216,7 +216,8 @@ export default class MenuBuilder {
               const userData = app.getPath('userData');
               if (userData) {
                 const result = await dialog.showOpenDialog({
-                  properties: ['openFile', 'openDirectory'],
+                  properties: ['openDirectory'],
+                  title: 'Wybierz katalog dla plików wyjściowych',
                 });
                 if (!result.canceled && result.filePaths[0]) {
                   fs.writeFileSync(
