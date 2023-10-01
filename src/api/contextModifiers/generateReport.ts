@@ -1,10 +1,14 @@
 import ETickerSource from '../../types/ETickerSource';
 import { TCryptoObject } from '../../types/TCryptoObject';
 import getTicker from '../requests/getTicker';
+// import addFieldsToExchangeRate from './addFieldsToExchangeRate';
 import calculateFinalValue from './calculateFinalValue';
 import convertUsdToPln from './convertUsdToPln';
 
-const generateReport = async (cryptoObject: TCryptoObject) => {
+const generateReport = async (
+  cryptoObject: TCryptoObject,
+  callback: () => void,
+) => {
   // const xd = {
   //   ID: 'dasdasdsa',
   //   raportName: 'Szacowanie wartości kryptoaktywów',
@@ -25,9 +29,9 @@ const generateReport = async (cryptoObject: TCryptoObject) => {
 
   cryptoObject.cryptos.forEach(async (crypto) => {
     const [binance, bittrex, zondacrypto] = await Promise.all([
-      getTicker(ETickerSource.BINANCE, crypto.shortname),
-      getTicker(ETickerSource.BITTREX, crypto.shortname),
-      getTicker(ETickerSource.ZONDACRYPTO, crypto.shortname),
+      getTicker(ETickerSource.BINANCE, crypto.shortName),
+      getTicker(ETickerSource.BITTREX, crypto.shortName),
+      getTicker(ETickerSource.ZONDACRYPTO, crypto.shortName),
     ]);
 
     if (!crypto.exchangeRate) {
@@ -48,7 +52,9 @@ const generateReport = async (cryptoObject: TCryptoObject) => {
 
     calculateFinalValue(cryptoObject);
 
+    // addFieldsToExchangeRate(cryptoObject);
     console.log(cryptoObject);
+    callback();
   });
 };
 

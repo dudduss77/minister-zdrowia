@@ -10,14 +10,14 @@ interface IInputCryptoWrapper {
 }
 
 const TestSchema = Yup.object().shape({
-  cryptoShortname: Yup.string().required('Pole wymagane'),
+  cryptoshortName: Yup.string().required('Pole wymagane'),
   cryptoValue: Yup.number().required('Pole wymagane'),
 });
 
 const InputCryptoWrapper = () => {
   const formik = useFormik({
     initialValues: {
-      cryptoShortname: '',
+      cryptoshortName: '',
       cryptoValue: '',
     },
     validationSchema: TestSchema,
@@ -30,11 +30,11 @@ const InputCryptoWrapper = () => {
       <InputSelect
         inputSelectPlaceholder="Wybierz kryptowalute"
         inputSelectOnChange={formik.handleChange}
-        inputSelectValue={formik.values.cryptoShortname}
-        inputSelectName="cryptoShortname"
+        inputSelectValue={formik.values.cryptoshortName}
+        inputSelectName="cryptoshortName"
         inputSelectErrorMessage={
-          formik.errors.cryptoShortname && formik.touched.cryptoShortname
-            ? formik.errors.cryptoShortname
+          formik.errors.cryptoshortName && formik.touched.cryptoshortName
+            ? formik.errors.cryptoshortName
             : ''
         }
         OptionsList={StaticCryptoList}

@@ -21,7 +21,7 @@ const InputSelect = ({
   //   const [selectItem, setSelectItem] = useState(inputSelectValue);
 
   //   useEffect(() => {
-  //     inputSelectOnChange(selectItem.shortname);
+  //     inputSelectOnChange(selectItem.shortName);
   //   }, [selectItem]);
 
   return (
@@ -57,10 +57,10 @@ const InputSelect = ({
     //     <div className="flex flex-col border-solid border-2 border-[#888888] rounded-b-lg border-t-0">
     //       {inputSelectOptions.map((value) => (
     //         <div
-    //           key={value.shortname}
+    //           key={value.shortName}
     //           className="p-2 cursor-pointer hover:bg-gray-200"
     //           onClick={() => {
-    //             setSelectItem({ shortname: value.shortname, name: value.name });
+    //             setSelectItem({ shortName: value.shortName, name: value.name });
     //             setShowOptions(false);
     //           }}
     //         >
@@ -85,7 +85,7 @@ const InputSelect = ({
           {inputSelectPlaceholder}
         </option>
         {OptionsList.map((value: any) => (
-          <option key={value.shortname} className="p-2" value={value.shortname}>
+          <option key={value.shortName} className="p-2" value={value.shortName}>
             {value.name}
           </option>
         ))}

@@ -1,14 +1,7 @@
 import { useNavigate } from 'react-router-dom';
-import {
-  ErrorMessage,
-  Field,
-  FieldArray,
-  Form,
-  Formik,
-  useFormik,
-} from 'formik';
+import { ErrorMessage, Field, FieldArray, Form, Formik } from 'formik';
 import * as Yup from 'yup';
-import { useContext, useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useRef } from 'react';
 import { Button } from './Button';
 import { StateContext } from '../contexts/StateContext';
 import { cryptoDictionary } from '../../api/consts';
@@ -21,7 +14,7 @@ const TestSchema = Yup.object().shape({
   ownersData: Yup.string().required('Pole wymagane'),
   cryptos: Yup.array().of(
     Yup.object().shape({
-      shortname: Yup.string().required('Pole wymagane'),
+      shortName: Yup.string().required('Pole wymagane'),
       quantity: Yup.number().required('Pole wymagane'),
     }),
   ),
@@ -29,7 +22,7 @@ const TestSchema = Yup.object().shape({
 
 const emptyCrypto = {
   name: '',
-  shortname: '',
+  shortName: '',
   quantity: '',
 };
 
@@ -48,16 +41,14 @@ export function StepFirst() {
       return;
     }
 
-    console.log('cryptoObject', cryptoObject);
     (async () => {
-      await generateReport(cryptoObject);
-      navigate('/second-step');
+      if (cryptoObject) {
+        await generateReport(cryptoObject, () => navigate('/second-step'));
+      }
     })();
   }, [cryptoObject]);
 
   return (
-    // <StateContext.Consumer>
-    //   {({ cryptoObject, setCryptoObject }) => (
     <div className="p-5 max-w-screen-md mx-auto h-screen">
       <Formik
         initialValues={{
@@ -67,7 +58,7 @@ export function StepFirst() {
           cryptos: [
             {
               name: '',
-              shortname: '',
+              shortName: '',
               quantity: '',
             },
           ],
@@ -79,13 +70,11 @@ export function StepFirst() {
             ...values,
             cryptos: values.cryptos.map((el) => ({
               ...el,
-              name: cryptoDictionary.find((i) => i.shortName === el.shortname)
+              name: cryptoDictionary.find((i) => i.shortName === el.shortName)
                 ?.name,
             })),
           };
           mapDataToContext(valueToSet, setCryptoObject);
-          // TODO
-          // navigate('/second-step');
         }}
       >
         {({ values }) => (
@@ -122,7 +111,7 @@ export function StepFirst() {
                         <div className="grow">
                           <Field
                             component="select"
-                            name={`cryptos.${index}.shortname`}
+                            name={`cryptos.${index}.shortName`}
                           >
                             <option value="">Wybierz kryptowalute</option>
                             {cryptoDictionary.map((val) => (
@@ -132,7 +121,7 @@ export function StepFirst() {
                             ))}
                           </Field>
                           <div className="text-sm text-red-700">
-                            <ErrorMessage name={`cryptos.${index}.shortname`} />
+                            <ErrorMessage name={`cryptos.${index}.shortName`} />
                           </div>
                         </div>
                         <div className="grow">
@@ -165,13 +154,11 @@ export function StepFirst() {
               />
             </div>
             <Button type="submit" color="bg-blue-500 w-full self-end mt-auto">
-              GENERUJ
+              SPRAWDŹ DANE
             </Button>
           </Form>
         )}
       </Formik>
     </div>
-    // )}
-    // </StateContext.Consumer>
   );
 }

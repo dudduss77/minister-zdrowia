@@ -40,4 +40,8 @@ export const cryptoDictionary: TCryproDictionaryItem[] = [
     name: 'Solana',
     shortName: 'SOL',
   },
+  {
+    name: 'Manchaster City Fan Token',
+    shortName: 'CITY',
+  },
 ];

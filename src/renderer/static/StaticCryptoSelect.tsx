@@ -1,10 +1,10 @@
 export const StaticCryptoList = [
-    {
-      shortname: 'BTC',
-      name: 'Bitcoin',
-    },
-    {
-      shortname: 'ETH',
-      name: 'Etherum',
-    },
-  ];
+  {
+    shortName: 'BTC',
+    name: 'Bitcoin',
+  },
+  {
+    shortName: 'ETH',
+    name: 'Etherum',
+  },
+];
