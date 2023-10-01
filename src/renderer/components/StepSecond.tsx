@@ -78,6 +78,9 @@ export const StepSecond = () => {
       >
         {({ values }) => (
           <Form className="h-full relative flex flex-col">
+            <h1 className="text-xl mb-3 text-center">
+              Uzupełnij brakujące dane
+            </h1>
             <FieldArray
               name="exchangeRateTemp"
               render={() =>

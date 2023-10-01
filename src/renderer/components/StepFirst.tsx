@@ -115,7 +115,7 @@ function StepFirst() {
                 name="cryptos"
                 render={(arrayHelpers) =>
                   values.cryptos.map((crypto, index) => (
-                    <div key={`div-${crypto.name}`} className=" mb-3">
+                    <div key={`div-${index}`} className=" mb-3">
                       <div className="flex gap-3 mb-3">
                         <div className="grow">
                           <Field
