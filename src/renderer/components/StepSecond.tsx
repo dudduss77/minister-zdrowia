@@ -129,6 +129,7 @@ export function StepSecond() {
                       <div className="grow">
                         <Field
                           component="select"
+                          style={{ minWidth: 70 }}
                           name={`exchangeRateTemp.${index}.currency`}
                         >
                           <option value="USD">USD</option>
