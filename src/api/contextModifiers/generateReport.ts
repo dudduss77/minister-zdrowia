@@ -3,6 +3,7 @@ import ETickerSource from '../../types/ETickerSource';
 import { TCryptoObject } from '../../types/TCryptoObject';
 import getTicker from '../requests/getTicker';
 import addFieldsToExchangeRate from './addFieldsToExchangeRate';
+import getExchangeRate from '../requests/getExchangeRate';
 // import calculateFinalValue from './calculateFinalValue';
 // import convertUsdToPln from './convertUsdToPln';
 
@@ -31,11 +32,14 @@ const generateReport = async (
   cryptoObject.ID = uuidv4();
 
   const pobierz = cryptoObject.cryptos.map(async (crypto) => {
-    const [binance, bittrex, zondacrypto] = await Promise.all([
+    const [plnExchangeRate, binance, bittrex, zondacrypto] = await Promise.all([
+      getExchangeRate(),
       getTicker(ETickerSource.BINANCE, crypto.shortName),
       getTicker(ETickerSource.BITTREX, crypto.shortName),
       getTicker(ETickerSource.ZONDACRYPTO, crypto.shortName),
     ]);
+
+    cryptoObject.averageNbpExchangeRate = plnExchangeRate.mid;
 
     if (!crypto.exchangeRate) {
       crypto.exchangeRate = [];
