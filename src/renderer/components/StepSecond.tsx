@@ -1,15 +1,14 @@
 import { useNavigate } from 'react-router-dom';
+import * as Yup from 'yup';
+import { useContext, useEffect } from 'react';
+import { ErrorMessage, Field, FieldArray, Form, Formik } from 'formik';
 import { Button } from './Button';
 import { StateContext } from '../contexts/StateContext';
-import * as Yup from 'yup';
-import { useContext } from 'react';
 import { TExchangeRate } from '../../types/TExchangeRate';
-import { ErrorMessage, Field, FieldArray, Form, Formik } from 'formik';
-import regenerateReport from '../../api/contextModifiers/regenerateReport';
-import { useEffect } from 'react';
+// import regenerateReport from '../../api/contextModifiers/regenerateReport';
 import { createLog } from '../utils/createLog';
 
-export const StepSecond = () => {
+export function StepSecond() {
   const navigate = useNavigate();
   const { cryptoObject, setCryptoObject } = useContext(StateContext);
 
@@ -48,6 +47,10 @@ export const StepSecond = () => {
             (x: TExchangeRate) => x.id === item.id,
           );
           if (newContent) {
+            if(newContent.currency === 'PLN') {
+              newContent.isOriginalCurrency = true
+            }
+            console.log(newContent)
             return newContent;
           }
         }
@@ -57,7 +60,8 @@ export const StepSecond = () => {
     });
 
     if (setCryptoObject) setCryptoObject(copy);
-    regenerateReport(cryptoObject, () => navigate('/raport'));
+    // regenerateReport(cryptoObject, () => navigate('/raport'));
+    navigate('/raport');
   };
 
   useEffect(() => {
@@ -144,4 +148,4 @@ export const StepSecond = () => {
       </Formik>
     </div>
   );
-};
+}

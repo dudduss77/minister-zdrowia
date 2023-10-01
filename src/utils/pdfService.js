@@ -1,5 +1,6 @@
 import { dirname } from 'path';
 import { createLog } from './logs';
+import { html } from './template';
 
 const pdf = require('html-pdf');
 const fs = require('fs');
@@ -15,7 +16,6 @@ function getCurrentDate() {
 }
 
 export const generatePdf = async (data, userDataPath) => {
-
   if (!data) return;
 
   let pdfPath = __dirname;
@@ -28,9 +28,9 @@ export const generatePdf = async (data, userDataPath) => {
     }
   }
 
-  const arrayBuffer = await data.arrayBuffer()
-  const newData = new Int8Array(arrayBuffer)
-  fs.writeFileSync(pdfPath, data)
+  const arrayBuffer = await data.arrayBuffer();
+  const newData = new Int8Array(arrayBuffer);
+  fs.writeFileSync(pdfPath, data);
   createLog(
     {
       type: 'REPORT',
