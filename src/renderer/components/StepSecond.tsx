@@ -48,6 +48,10 @@ export const StepSecond = () => {
             (x: TExchangeRate) => x.id === item.id,
           );
           if (newContent) {
+            if(newContent.currency === 'PLN') {
+              newContent.isOriginalCurrency = true
+            }
+            console.log(newContent)
             return newContent;
           }
         }

@@ -3,6 +3,7 @@ export type TExchangeRate = {
   name: string;
   value: number | null;
   currency: 'PLN' | 'USD' | null;
+  isOriginalCurrency?: boolean;
   id?: number;
   label?: string;
 };
