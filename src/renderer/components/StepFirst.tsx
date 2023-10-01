@@ -1,13 +1,49 @@
 import { useNavigate } from 'react-router-dom';
-import { ErrorMessage, Field, FieldArray, Form, Formik } from 'formik';
+import {
+  ErrorMessage,
+  Field,
+  FieldArray,
+  Form,
+  Formik,
+  useFormikContext,
+} from 'formik';
 import * as Yup from 'yup';
 import { useContext, useEffect, useRef } from 'react';
+import Autocomplete from '@mui/material/Autocomplete';
+import TextField from '@mui/material/TextField';
 import { Button } from './Button';
 import { StateContext } from '../contexts/StateContext';
 import { cryptoDictionary } from '../../api/consts';
 import RemoveButton from './RemoveButton';
 import generateReport from '../../api/contextModifiers/generateReport';
 import { createLog } from '../utils/createLog';
+import headsOfTaxOffices from '../../consts/headsOfTaxOffices';
+
+function MyAutocomplete() {
+  const { setFieldValue } = useFormikContext();
+
+  return (
+    <Autocomplete
+      disablePortal
+      id="combo-box-demo"
+      options={headsOfTaxOffices}
+      onChange={(_e, val) => {
+        setFieldValue('organizationName', val);
+      }}
+      style={{
+        marginTop: 16,
+        marginBottom: 16,
+        borderRadius: 8,
+        color: 'black',
+        borderColor: 'black',
+      }}
+      renderInput={(params) => (
+        // eslint-disable-next-line react/jsx-props-no-spreading
+        <TextField {...params} label="Nazwa organu egzekucyjnego" />
+      )}
+    />
+  );
+}
 
 const TestSchema = Yup.object().shape({
   organizationName: Yup.string().required('Pole wymagane'),
@@ -92,10 +128,7 @@ function StepFirst() {
               Uzupełnij dane do raportu
             </h1>
             <div className="content-max-height overflow-y-auto">
-              <Field
-                name="organizationName"
-                placeholder="Nazwa organu egzekucyjnego"
-              />
+              <MyAutocomplete />
               <div className="text-sm text-red-700 mb-3">
                 <ErrorMessage name="organizationName" />
               </div>
@@ -115,7 +148,7 @@ function StepFirst() {
                 name="cryptos"
                 render={(arrayHelpers) =>
                   values.cryptos.map((crypto, index) => (
-                    <div key={`div-${index}`} className=" mb-3">
+                    <div key={`div-${crypto.shortName}`} className=" mb-3">
                       <div className="flex gap-3 mb-3">
                         <div className="grow">
                           <Field
