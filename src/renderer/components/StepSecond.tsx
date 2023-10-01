@@ -1,9 +1,18 @@
 import { useNavigate } from 'react-router-dom';
 import { Button } from './Button';
 import { StateContext } from '../contexts/StateContext';
+import { useEffect } from 'react';
+import { createLog } from '../utils/createLog';
 
 export const StepSecond = () => {
   const navigate = useNavigate();
+
+  useEffect(() => {
+    createLog({
+      type: 'SET_DATA',
+      data: {}
+    })
+  }, [])
 
   return (
     <StateContext.Consumer>

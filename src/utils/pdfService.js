@@ -1,4 +1,5 @@
 import { dirname } from 'path';
+import { createLog } from './logs';
 
 const pdf = require('html-pdf');
 const fs = require('fs');
@@ -99,7 +100,10 @@ export const generatePdf = (data) => {
                 console.log(err);
                 return reject(err)
             }
-
+            createLog({
+                type: 'REPORT',
+                data: { id }
+              })
             console.log(res)
             resolve(res)
         });
