@@ -15,7 +15,7 @@ const TestSchema = Yup.object().shape({
   ownersData: Yup.string().required('Pole wymagane'),
   cryptos: Yup.array().of(
     Yup.object().shape({
-      shortname: Yup.string().required('Pole wymagane'),
+      shortName: Yup.string().required('Pole wymagane'),
       quantity: Yup.number().required('Pole wymagane'),
     }),
   ),
@@ -23,7 +23,7 @@ const TestSchema = Yup.object().shape({
 
 const emptyCrypto = {
   name: '',
-  shortname: '',
+  shortName: '',
   quantity: '',
 };
 
@@ -42,11 +42,11 @@ function StepFirst() {
       return;
     }
 
-    console.log('cryptoObject', cryptoObject);
     if (!cryptoObject) return;
     (async () => {
-      await generateReport(cryptoObject);
-      navigate('/second-step');
+      if (cryptoObject) {
+        await generateReport(cryptoObject, () => navigate('/second-step'));
+      }
     })();
   }, [cryptoObject, navigate]);
 
@@ -58,8 +58,6 @@ function StepFirst() {
   }, []);
 
   return (
-    // <StateContext.Consumer>
-    //   {({ cryptoObject, setCryptoObject }) => (
     <div className="p-5 max-w-screen-md mx-auto h-screen">
       <Formik
         initialValues={{
@@ -69,7 +67,7 @@ function StepFirst() {
           cryptos: [
             {
               name: '',
-              shortname: '',
+              shortName: '',
               quantity: '',
             },
           ],
@@ -81,13 +79,11 @@ function StepFirst() {
             ...values,
             cryptos: values.cryptos.map((el) => ({
               ...el,
-              name: cryptoDictionary.find((i) => i.shortName === el.shortname)
+              name: cryptoDictionary.find((i) => i.shortName === el.shortName)
                 ?.name,
             })),
           };
           mapDataToContext(valueToSet, setCryptoObject);
-          // TODO
-          // navigate('/second-step');
         }}
       >
         {({ values }) => (
@@ -124,7 +120,7 @@ function StepFirst() {
                         <div className="grow">
                           <Field
                             component="select"
-                            name={`cryptos.${index}.shortname`}
+                            name={`cryptos.${index}.shortName`}
                           >
                             <option value="">Wybierz kryptowalute</option>
                             {cryptoDictionary.map((val) => (
@@ -134,7 +130,7 @@ function StepFirst() {
                             ))}
                           </Field>
                           <div className="text-sm text-red-700">
-                            <ErrorMessage name={`cryptos.${index}.shortname`} />
+                            <ErrorMessage name={`cryptos.${index}.shortName`} />
                           </div>
                         </div>
                         <div className="grow">
@@ -167,14 +163,12 @@ function StepFirst() {
               />
             </div>
             <Button type="submit" color="bg-blue-500 w-full self-end mt-auto">
-              GENERUJ
+              SPRAWDŹ DANE
             </Button>
           </Form>
         )}
       </Formik>
     </div>
-    // )}
-    // </StateContext.Consumer>
   );
 }
 

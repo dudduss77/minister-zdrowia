@@ -16,7 +16,7 @@ export const StepRaport = () => {
     <StateContext.Consumer>
       {({ cryptoObject, setCryptoObject }) => (
         <div className="p-5">
-          RAPORT STEP
+          <pre>{`${JSON.stringify(cryptoObject)}`}</pre>
           <Button color="bg-red-500" onClick={() => console.log('pobierz')}>
             POBIERZ PDF
           </Button>
