@@ -1,9 +1,10 @@
+import { v4 as uuidv4 } from 'uuid';
 import ETickerSource from '../../types/ETickerSource';
 import { TCryptoObject } from '../../types/TCryptoObject';
 import getTicker from '../requests/getTicker';
 import addFieldsToExchangeRate from './addFieldsToExchangeRate';
-import calculateFinalValue from './calculateFinalValue';
-import convertUsdToPln from './convertUsdToPln';
+// import calculateFinalValue from './calculateFinalValue';
+// import convertUsdToPln from './convertUsdToPln';
 
 const generateReport = async (
   cryptoObject: TCryptoObject,
@@ -27,6 +28,8 @@ const generateReport = async (
   //   ],
   // };
 
+  cryptoObject.ID = uuidv4();
+
   const pobierz = cryptoObject.cryptos.map(async (crypto) => {
     const [binance, bittrex, zondacrypto] = await Promise.all([
       getTicker(ETickerSource.BINANCE, crypto.shortName),
@@ -48,9 +51,9 @@ const generateReport = async (
       crypto.exchangeRate.push(zondacrypto);
     }
 
-    await convertUsdToPln(cryptoObject);
+    // await convertUsdToPln(cryptoObject);
 
-    calculateFinalValue(cryptoObject);
+    // calculateFinalValue(cryptoObject);
   });
 
   await Promise.allSettled(pobierz);
