@@ -15,7 +15,9 @@ function getCurrentDate() {
   return `${day}.${month}.${year}`;
 }
 
-export const generatePdf = (data, userDataPath) => {
+export const generatePdf = async (data, userDataPath) => {
+  if (!data || !data.blob || data.id === undefined) return;
+
   let pdfPath = __dirname;
   console.log(userDataPath + '/userConfig.json');
   if (fs.existsSync(userDataPath + '/userConfig.json')) {
@@ -26,111 +28,129 @@ export const generatePdf = (data, userDataPath) => {
     }
   }
 
-  let html = fs.readFileSync(__dirname + '/template.html', 'utf8');
+  fs.writeFileSync(
+    pdfPath + '/' + data.id + '.pdf',
+    Buffer.from(data.blob),
+    (error) => {
+      if (error) {
+        throw error;
+      } else {
+        console.log('buffer saved!');
+      }
+    },
+  );
 
-  const {
-    id,
-    reasonNumber,
-    ownersData,
-    averagePrice,
-    averageNbpExchangeRate,
-    cryptos,
-  } = data;
+  // fs.writeFileSync(pdfPath, data);
+  // createLog(
+  //   {
+  //     type: 'REPORT',
+  //     data: { 'id' },
+  //   },
+  //   userDataPath,
+  // );
 
-  console.log(averagePrice);
-  const mappedCryptos = cryptos.map((item) => {
-    const { quantity, shortName, name, exchangeRate, averagePrice } = item;
-    let toReturn = `
-            <div class="sumRow">
-                <span>${quantity} ${shortName}:</span>
-                <span>${averagePrice} PLN<span>
-                <span>Kurs NBP: 1 USD = ${averageNbpExchangeRate} PLN</span>
-            </div>
-        `;
+  //   let html = fs.readFileSync(__dirname + '/template.html', 'utf8');
 
-    const mappedExchangeRate = exchangeRate.map((item) => {
-      const { link, value, currency, isOriginalCurrency } = item;
-      // const content = `
-      // <span class="green">1 BTC = ${value}</span>
-      // <span class="green">( Wartość: ${quantity * value} PLN )</span>
-      // <span>- Przeliczono z USD</span>
-      // <span class="red">Kryptowaluta nie jest notowana na giełdzie</span>`
-      let content = ``;
-      if (value) {
-            let totalPrice = quantity * value;
-            totalPrice *= currency === 'USDT' ? averageNbpExchangeRate : 1
-            
-            content = `<span class="green">1 BTC = ${value}</span>
-                <span class="green">( Wartość: ${totalPrice.toFixed(2)} PLN} )</span>`;
-            if(!isOriginalCurrency) content += `<span>- Przeliczono z USD</span>`
-      } else
-        content = `<span class="red">Kryptowaluta nie jest notowana na giełdzie</span>`;
-      return `
-            <div class="small">
-                <span>${link}</span>
-                ${content}
-            </div>
-            `;
-    });
+  //   const {
+  //     id,
+  //     reasonNumber,
+  //     ownersData,
+  //     averagePrice,
+  //     averageNbpExchangeRate,
+  //     cryptos,
+  //   } = data;
 
-    toReturn += `
-        <div class="sumRow">
-            ${mappedExchangeRate.join('')}
-        </div>
-        `;
+  //   console.log(averagePrice);
+  //   const mappedCryptos = cryptos.map((item) => {
+  //     const { quantity, shortName, name, exchangeRate, averagePrice } = item;
+  //     let toReturn = `
+  //             <div class="sumRow">
+  //                 <span>${quantity} ${shortName}:</span>
+  //                 <span>${averagePrice} PLN<span>
+  //                 <span>Kurs NBP: 1 USD = ${averageNbpExchangeRate} PLN</span>
+  //             </div>
+  //         `;
 
-    //     toReturn += (`
-    //     <div class="sumRow">
-    //     <div class="small">
-    //         <span>https://www.chmes.pl/produkt/benzoesan-denatonium-bitrex/</span>
-    //         <span class="red">Kryptowaluta nie jest notowana na giełdzie</span>
-    //     </div>
-    //     <div class="small">
-    //         <span>https://www.chmes.pl/produkt/benzoesan-denatonium-bitrex/</span>
-    //         <span class="green">1 BTC = 120 000 PLN</span>
-    //         <span class="green">( Wartość: 1000 PLN )</span>
-    //         <span>- Przeliczono z USD</span>
-    //     </div>
-    //     <div class="small">
-    //         <span>https://www.chmes.pl/produkt/benzoesan-denatonium-bitrex/</span>
-    //         <span class="green">1 BTC = 120 000 PLN</span>
-    //         <span class="green">( Wartość: 1000 PLN )</span>
-    //         <span>- Przeliczono z USD</span>
-    //     </div>
-    // </div>
-    //     `)
+  //     const mappedExchangeRate = exchangeRate.map((item) => {
+  //       const { link, value } = item;
+  //       // const content = `
+  //       // <span class="green">1 BTC = ${value}</span>
+  //       // <span class="green">( Wartość: ${quantity * value} PLN )</span>
+  //       // <span>- Przeliczono z USD</span>
+  //       // <span class="red">Kryptowaluta nie jest notowana na giełdzie</span>`
+  //       let content = ``;
+  //       if (value)
+  //         content = `<span class="green">1 BTC = ${value}</span>
+  //             // <span class="green">( Wartość: ${quantity * value} PLN )</span>
+  //             // <span>- Przeliczono z USD</span>`;
+  //       else
+  //         content = `<span class="red">Kryptowaluta nie jest notowana na giełdzie</span>`;
+  //       return `
+  //             <div class="small">
+  //                 <span>${link}</span>
+  //                 ${content}
+  //             </div>
+  //             `;
+  //     });
 
-    return toReturn;
-  });
+  //     toReturn += `
+  //         <div class="sumRow">
+  //             ${mappedExchangeRate.join('')}
+  //         </div>
+  //         `;
 
-  html = html
-    .replace('<#id>', id)
-    .replace('<#date>', getCurrentDate())
-    .replace('<#reasonNumber>', reasonNumber)
-    .replace('<#ownersData>', ownersData)
-    .replace('<#averagePrice>', averagePrice)
-    .replace('<#mappedCryptos>', mappedCryptos.join(''));
+  //     //     toReturn += (`
+  //     //     <div class="sumRow">
+  //     //     <div class="small">
+  //     //         <span>https://www.chmes.pl/produkt/benzoesan-denatonium-bitrex/</span>
+  //     //         <span class="red">Kryptowaluta nie jest notowana na giełdzie</span>
+  //     //     </div>
+  //     //     <div class="small">
+  //     //         <span>https://www.chmes.pl/produkt/benzoesan-denatonium-bitrex/</span>
+  //     //         <span class="green">1 BTC = 120 000 PLN</span>
+  //     //         <span class="green">( Wartość: 1000 PLN )</span>
+  //     //         <span>- Przeliczono z USD</span>
+  //     //     </div>
+  //     //     <div class="small">
+  //     //         <span>https://www.chmes.pl/produkt/benzoesan-denatonium-bitrex/</span>
+  //     //         <span class="green">1 BTC = 120 000 PLN</span>
+  //     //         <span class="green">( Wartość: 1000 PLN )</span>
+  //     //         <span>- Przeliczono z USD</span>
+  //     //     </div>
+  //     // </div>
+  //     //     `)
 
-  console.log('ZZZZZZZZZZZZZZZ');
-  console.log(pdfPath);
+  //     return toReturn;
+  //   });
 
-  return new Promise((resolve, reject) => {
-    pdf
-      .create(html, OPTIONS)
-      .toFile(pdfPath + '/' + id + '.pdf', function (err, res) {
-        if (err) {
-          console.log(err);
-          return reject(err);
-        }
-        createLog(
-          {
-            type: 'REPORT',
-            data: { id },
-          },
-          userDataPath,
-        );
-        console.log(res);
-        resolve(res);
-      });
-  });
+  //   html = html
+  //     .replace('<#id>', id)
+  //     .replace('<#date>', getCurrentDate())
+  //     .replace('<#reasonNumber>', reasonNumber)
+  //     .replace('<#ownersData>', ownersData)
+  //     .replace('<#averagePrice>', averagePrice)
+  //     .replace('<#mappedCryptos>', mappedCryptos.join(''));
+
+  //   console.log('ZZZZZZZZZZZZZZZ');
+  //   console.log(pdfPath);
+
+  //   return new Promise((resolve, reject) => {
+  //     pdf
+  //       .create(html, OPTIONS)
+  //       .toFile(pdfPath + '/' + id + '.pdf', function (err, res) {
+  //         if (err) {
+  //           console.log(err);
+  //           return reject(err);
+  //         }
+  //         createLog(
+  //           {
+  //             type: 'REPORT',
+  //             data: { id },
+  //           },
+  //           userDataPath,
+  //         );
+  //         console.log(res);
+  //         resolve(res);
+  //       });
+  //   });
 };
