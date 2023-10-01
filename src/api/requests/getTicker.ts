@@ -3,6 +3,11 @@ import { TBinanceTickerReponse } from '../../types/TBinanceTickerResponse';
 import { TBittrexTickerReponse } from '../../types/TBittrexTickerResponse';
 import { TExchangeRate } from '../../types/TExchangeRate';
 import { TZondaCryptoTickerReponse } from '../../types/TZondaCryptoTickerReponse';
+import { ErrTickerNotFound } from '../consts';
+
+const buildTickerUrlForPln = (marketCode: string) => {
+  return `https://api.zondacrypto.exchange/rest/trading/ticker/${marketCode}-PLN`;
+};
 
 const buildTickerUrl = (source: ETickerSource, marketCode: string) => {
   switch (source) {
@@ -29,16 +34,34 @@ const names: Record<ETickerSource, string> = {
   [ETickerSource.BITTREX]: 'Bittrex',
 };
 
-const processZondaCryptoTicker = (ticker: TZondaCryptoTickerReponse) => {
-  if (ticker.status === 'Fail') {
-    throw new Error(ticker.errors.join(', '));
+const processZondaCryptoTicker = async (
+  ticker: TZondaCryptoTickerReponse,
+  marketCode: string,
+) => {
+  // bruh, this is so ugly, but its a hackathon, so who cares
+  let newTicker = ticker;
+  if (ticker.status === 'Fail' && ticker.errors.includes(ErrTickerNotFound)) {
+    try {
+      const response = await fetch(buildTickerUrlForPln(marketCode));
+      if (response.status !== 200) {
+        throw new Error('Server error');
+      }
+      const data = (await response.json()) as TZondaCryptoTickerReponse;
+      newTicker = data;
+    } catch {
+      throw new Error('Server error');
+    }
+  }
+
+  if (newTicker.status === 'Fail') {
+    throw new Error(newTicker.errors.join(', '));
   }
 
   const exchangeRate: TExchangeRate = {
-    currency: 'USD',
+    currency: newTicker.ticker.market.second.currency === 'PLN' ? 'PLN' : 'USD',
     link: links[ETickerSource.ZONDACRYPTO],
     name: names[ETickerSource.ZONDACRYPTO],
-    value: +ticker.ticker.rate,
+    value: +newTicker.ticker.rate,
   };
   return exchangeRate;
 };
@@ -72,7 +95,7 @@ const getTicker = async (source: ETickerSource, marketCode: string) => {
     const data = await response.json();
     switch (source) {
       case ETickerSource.ZONDACRYPTO:
-        return processZondaCryptoTicker(data);
+        return await processZondaCryptoTicker(data, marketCode);
       case ETickerSource.BINANCE:
         return processBinanceTicker(data);
       case ETickerSource.BITTREX:
